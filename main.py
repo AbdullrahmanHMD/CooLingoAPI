@@ -15,7 +15,7 @@ user_add_args.add_argument("password", type=str, help="The password of the user"
 users = {}
 
 def abort_on_user_does_not_exist(user_id):
-    if user_id not in users.keys():
+    if user_id in users.keys():
         abort(404, message="User does not exits")
 
 def abort_on_user_exists(user_id):
