@@ -43,7 +43,7 @@ class User(Resource):
         args = user_add_args.parse_args()
         users[user_id] = args
         
-        return users[user_id], 201 # 201: Created.
+        return print(args)
     
     def delete(self, user_id):
         
@@ -51,7 +51,7 @@ class User(Resource):
         return db_mgr.delete_user(user_id=user_id)
 
 
-api.add_resource(User, "/user/<int:user_id>")
+# api.add_resource(User, "/user/<int:user_id>")
     
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8080, debug=True)
