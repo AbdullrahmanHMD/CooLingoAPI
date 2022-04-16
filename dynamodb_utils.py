@@ -55,9 +55,9 @@ class DbManager():
         try:
             response = self.USERS_TABLE.put_item(Item=new_user)
 
-        except ClientError as error:
-            error_msg = error.response['Error']['Message']
-            error_code = error.response['Error']['Code']
+        except ClientError as err:
+            error_msg = err.response['Error']['Message']
+            error_code = err.response['Error']['Code']
             logger.error('Could not add user with ID: %d from table %s. %s: %s',
                          user_id, self.USERS_TABLE_NAME,
                          error_code, error_msg)
@@ -72,9 +72,9 @@ class DbManager():
         try:
             response = self.USERS_TABLE.get_item(Key=key)['Item']
             
-        except ClientError as error:
-            error_msg = error.response['Error']['Message']
-            error_code = error.response['Error']['Code']
+        except ClientError as err:
+            error_msg = err.response['Error']['Message']
+            error_code = err.response['Error']['Code']
             logger.error('Could not get user with ID: %d from table %s. %s: %s',
                          user_id, self.USERS_TABLE_NAME,
                          error_code, error_msg)
@@ -89,9 +89,9 @@ class DbManager():
         try:
             response = self.USERS_TABLE.delete_item(Key=key)['ResponseMetadata']['HTTPStatusCode']
         
-        except ClientError as error:
-            error_msg = error.response['Error']['Message']
-            error_code = error.response['Error']['Code']
+        except ClientError as err:
+            error_msg = err.response['Error']['Message']
+            error_code = err.response['Error']['Code']
             logger.error('Could not delete with ID: %d from table %s. %s: %s',
                          user_id, self.USERS_TABLE_NAME,
                          error_code, error_msg)
