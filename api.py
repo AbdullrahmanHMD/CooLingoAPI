@@ -51,7 +51,7 @@ class User(Resource):
         return db_mgr.delete_user(user_id=user_id)
 
 
-# api.add_resource(User, "/user/<int:user_id>")
+api.add_resource(User, "/user/<int:user_id>")
     
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8080, debug=True)
