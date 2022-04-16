@@ -58,8 +58,9 @@ class DbManager():
         except ClientError as error:
             error_msg = error.response['Error']['Message']
             error_code = error.response['Error']['Code']
-            logger.error(f'Could not add user with ID: {user_id} from table {self.USERS_TABLE_NAME}. {error_code}: {error_msg}')
-
+            logger.error('Could not add user with ID: %d from table %s. %s: %s',
+                         user_id, self.USERS_TABLE_NAME,
+                         error_code, error_msg)
             response = None
             raise        
         return response
@@ -74,7 +75,9 @@ class DbManager():
         except ClientError as error:
             error_msg = error.response['Error']['Message']
             error_code = error.response['Error']['Code']
-            logger.error(f'Could not get user with ID: {user_id} from table {self.USERS_TABLE_NAME}. {error_code}: {error_msg}')
+            logger.error('Could not get user with ID: %d from table %s. %s: %s',
+                         user_id, self.USERS_TABLE_NAME,
+                         error_code, error_msg)
 
             response = None
             raise        
@@ -89,8 +92,9 @@ class DbManager():
         except ClientError as error:
             error_msg = error.response['Error']['Message']
             error_code = error.response['Error']['Code']
-            logger.error(f'Could not delete user with ID: {user_id} from table {self.USERS_TABLE_NAME}. {error_code}: {error_msg}')
-
+            logger.error('Could not delete with ID: %d from table %s. %s: %s',
+                         user_id, self.USERS_TABLE_NAME,
+                         error_code, error_msg)
             response = None
             raise        
         
