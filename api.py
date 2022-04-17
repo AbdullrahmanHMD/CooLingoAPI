@@ -25,7 +25,13 @@ user_get_args = reqparse.RequestParser()
 user_get_args.add_argument("user_id", type=int, help="The ID of the user", required=True)
 # ------------------------------------------------------------------------------------------------------
 
+# {"user_id": "0", "age": "24", "email": "test@email.com", "first_name": "Test", "last_name": "ABC", "password": "12345"}
+
 db_mgr = DbManager()
+
+db_mgr.add_user(user_id="0", age="24",
+                first_name="test@email.com", last_name="Test",
+                email="ABC", password="12345")
 
 users = {}
 # TODO: Modify implementation so that it works with dynamodb
@@ -50,7 +56,7 @@ class User(Resource):
         # the args variables stores and input dict containing
         # the user's info.
         args = user_add_args.parse_args()
-        # users[user_id] = args
+        users[user_id] = args
         
         
         db_mgr.add_user(user_id=args['user_id'], age=args['age'],
@@ -67,7 +73,8 @@ class User(Resource):
         return db_mgr.delete_user(user_id=user_id)
 
 
-api.add_resource(User, "/user")
+api.add_resource(User, "/user/<int:user_id>")
+# api.add_resource(User, "/user/<int:user_id>")
     
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8080, debug=True)
