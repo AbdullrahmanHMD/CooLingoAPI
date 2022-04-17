@@ -18,11 +18,11 @@ user_add_args.add_argument("last_name", type=str, help="The last name of the use
 user_add_args.add_argument("email", type=str, help="The email of the user", required=True)
 user_add_args.add_argument("password", type=str, help="The password of the user", required=True)
 
-user_delete_args = reqparse.RequestParser()
-user_delete_args.add_argument("user_id", type=int, help="The ID of the user", required=True)
+# user_delete_args = reqparse.RequestParser()
+# user_delete_args.add_argument("user_id", type=int, help="The ID of the user", required=True)
 
-user_get_args = reqparse.RequestParser()
-user_get_args.add_argument("user_id", type=int, help="The ID of the user", required=True)
+# user_get_args = reqparse.RequestParser()
+# user_get_args.add_argument("user_id", type=int, help="The ID of the user", required=True)
 # ------------------------------------------------------------------------------------------------------
 
 # {"user_id": "0", "age": "24", "first_name": "Test", "last_name": "ABC", "email": "test@email.com", "password": "12345"}
@@ -43,7 +43,7 @@ def abort_on_user_exists(user_id):
 class User(Resource):
     def get(self, user_id):
         # abort_on_user_does_not_exist(user_id)
-        args = user_get_args.parse_args()
+        # args = user_get_args.parse_args()
         return db_mgr.get_user(user_id=user_id)
     
     def post(self, user_id):
@@ -65,12 +65,12 @@ class User(Resource):
         
         # abort_on_user_does_not_exist(user_id)
         
-        args = user_delete_args.parse_args()
+        # args = user_delete_args.parse_args()
         return db_mgr.delete_user(user_id=user_id)
 
 
-api.add_resource(User)
-# api.add_resource(User, "/user/<int:user_id>")
+# api.add_resource(User)
+api.add_resource(User, "/user/<int:user_id>")
     
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8080, debug=True)
