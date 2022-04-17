@@ -29,7 +29,7 @@ user_get_args.add_argument("user_id", type=int, help="The ID of the user", requi
 
 db_mgr = DbManager()
 
-db_mgr.add_user(user_id="0", age="24",
+db_mgr.add_user(user_id=0, age=24,
                 first_name="test@email.com", last_name="Test",
                 email="ABC", password="12345")
 
