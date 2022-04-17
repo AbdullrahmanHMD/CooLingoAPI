@@ -50,7 +50,7 @@ class User(Resource):
         # the args variables stores and input dict containing
         # the user's info.
         args = user_add_args.parse_args()
-        users[user_id] = args
+        # users[user_id] = args
         
         
         db_mgr.add_user(user_id=args['user_id'], age=args['age'],
@@ -67,7 +67,7 @@ class User(Resource):
         return db_mgr.delete_user(user_id=user_id)
 
 
-api.add_resource(User, "/user/<int:user_id>")
+api.add_resource(User, "/user")
     
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8080, debug=True)
