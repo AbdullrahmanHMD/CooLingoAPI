@@ -69,7 +69,7 @@ class User(Resource):
         return db_mgr.delete_user(user_id=user_id)
 
 
-api.add_resource(User, "/user/<int:user_id>")
+api.add_resource(User)
 # api.add_resource(User, "/user/<int:user_id>")
     
 if __name__ == "__main__":
