@@ -46,15 +46,15 @@ class User(Resource):
         user_id = args['user_id']
         response = db_mgr.get_user(user_id=user_id)
         
-        # json_response = {db_mgr.COLUMNS[0]: response[db_mgr.COLUMNS[0]],
-        #                 db_mgr.COLUMNS[1]: response[db_mgr.COLUMNS[1]],
-        #                 db_mgr.COLUMNS[2]: response[db_mgr.COLUMNS[2]],
-        #                 db_mgr.COLUMNS[3]: response[db_mgr.COLUMNS[3]],
-        #                 db_mgr.COLUMNS[4]: response[db_mgr.COLUMNS[4]],
-        #                 db_mgr.COLUMNS[5]: response[db_mgr.COLUMNS[5]]
-        #                  }
+        json_response = {db_mgr.COLUMNS[0]: str(response[db_mgr.COLUMNS[0]]),
+                        db_mgr.COLUMNS[1]: str(response[db_mgr.COLUMNS[1]]),
+                        db_mgr.COLUMNS[2]: str(response[db_mgr.COLUMNS[2]]),
+                        db_mgr.COLUMNS[3]: str(response[db_mgr.COLUMNS[3]]),
+                        db_mgr.COLUMNS[4]: str(response[db_mgr.COLUMNS[4]]),
+                        db_mgr.COLUMNS[5]: str(response[db_mgr.COLUMNS[5]])
+                         }
         
-        return json.dumps(response, cls=utils.DecimalJsonEncoder)
+        return json.dumps(json_response)
 
     
     def post(self):
