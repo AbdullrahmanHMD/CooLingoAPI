@@ -12,6 +12,6 @@ class DecimalJsonEncoder(json.JSONDecoder):
         if isinstance(obj, Decimal):
             return str(obj)
         
-        return super(DecimalJsonEncoder, self).default(obj)
+        return json.JSONEncoder.default(self, obj)
         
 
