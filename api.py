@@ -48,13 +48,13 @@ class User(Resource):
         
         json_response = {db_mgr.COLUMNS[0]: str(response[db_mgr.COLUMNS[0]]),
                         db_mgr.COLUMNS[1]: str(response[db_mgr.COLUMNS[1]]),
-                        db_mgr.COLUMNS[2]: str(response[db_mgr.COLUMNS[2]]),
-                        db_mgr.COLUMNS[3]: str(response[db_mgr.COLUMNS[3]]),
-                        db_mgr.COLUMNS[4]: str(response[db_mgr.COLUMNS[4]]),
-                        db_mgr.COLUMNS[5]: str(response[db_mgr.COLUMNS[5]])
+                        db_mgr.COLUMNS[2]: response[db_mgr.COLUMNS[2]],
+                        db_mgr.COLUMNS[3]: response[db_mgr.COLUMNS[3]],
+                        db_mgr.COLUMNS[4]: response[db_mgr.COLUMNS[4]],
+                        db_mgr.COLUMNS[5]: response[db_mgr.COLUMNS[5]]
                          }
         
-        return json.dumps(json_response)
+        return json_response
 
     
     def post(self):
