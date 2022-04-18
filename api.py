@@ -46,14 +46,12 @@ class User(Resource):
         # args = user_get_args.parse_args()
         return db_mgr.get_user(user_id=user_id)
     
-    def post(self, user_id):
+    def post(self):
         # abort_on_user_exists(user_id)
         
         # the args variables stores and input dict containing
         # the user's info.
         args = user_add_args.parse_args()
-        users[user_id] = args
-        
         
         db_mgr.add_user(user_id=args['user_id'], age=args['age'],
                         first_name=args['first_name'], last_name=args['last_name'],
@@ -69,8 +67,8 @@ class User(Resource):
         return db_mgr.delete_user(user_id=user_id)
 
 
-# api.add_resource(User)
-api.add_resource(User, "/user/<int:user_id>")
+api.add_resource(User, "/users")
+# api.add_resource(User, "/user/<int:user_id>")
     
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8080, debug=True)
