@@ -27,6 +27,11 @@ class DbManager():
                 'first_name', 'last_name', 'password']
 
 
+    def add_user_dict(self, new_user):
+        response = self.USERS_TABLE.put_item(Item=new_user)
+ 
+        return response
+
     def add_user(self, user_id : int, age : int,
                 email : str, first_name : str,
                 last_name : str, password : str):
