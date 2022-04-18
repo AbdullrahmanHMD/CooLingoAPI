@@ -1,11 +1,8 @@
 import json
-from flask import request
-from flask_lambda import FlaskLambda
-from flask_restful import Api
+from flask import request, Flask
 from dynamodb_utils import *
 
-app = FlaskLambda(__name__)
-
+app = Flask(__name__)
 db_manager = DbManager()
 
 @app.route('/users', methods=['POST'])
@@ -18,5 +15,7 @@ def put_student():
         200,
         {'Content-Type': 'application/json'}
         )
-    
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=8080, debug=True)
 
