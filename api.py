@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_restful import Api, Resource, reqparse, abort
 from dynamodb_utils import *
+import json
 
 app = Flask(__name__)
 api = Api(app)
@@ -42,8 +43,21 @@ class User(Resource):
         # abort_on_user_does_not_exist(user_id)
         args = user_get_args.parse_args()
         user_id = args['user_id']
+        response = db_mgr.get_user(user_id=user_id)
         
-        return db_mgr.get_user(user_id=user_id)
+        json_response = {db_mgr.COLUMNS[0]: response[db_mgr.COLUMNS[0]],
+                        db_mgr.COLUMNS[1]: response[db_mgr.COLUMNS[1]],
+                        db_mgr.COLUMNS[2]: response[db_mgr.COLUMNS[2]],
+                        db_mgr.COLUMNS[3]: response[db_mgr.COLUMNS[3]],
+                        db_mgr.COLUMNS[4]: response[db_mgr.COLUMNS[4]],
+                        db_mgr.COLUMNS[5]: response[db_mgr.COLUMNS[5]]
+                         }
+        
+        return (
+            json.dumps(json_response),
+            200,
+            {'Content-Type': 'application/json'}
+            )
     
     def post(self):
         # abort_on_user_exists(user_id)
