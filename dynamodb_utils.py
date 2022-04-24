@@ -81,7 +81,7 @@ class DbManager():
         except ClientError as err:
             error_msg = err.response['Error']['Message']
             error_code = err.response['Error']['Code']
-            logger.error('Could not get user with ID: %d from table %s. %s: %s',
+            logger.error('Could not get user with ID: %s from table %s. %s: %s',
                          user_id, self.USERS_TABLE_NAME,
                          error_code, error_msg)
 
@@ -100,7 +100,7 @@ class DbManager():
         except ClientError as err:
             error_msg = err.response['Error']['Message']
             error_code = err.response['Error']['Code']
-            logger.error('Could not delete with ID: %d from table %s. %s: %s',
+            logger.error('Could not delete with ID: %s from table %s. %s: %s',
                          user_id, self.USERS_TABLE_NAME,
                          error_code, error_msg)
             response = None

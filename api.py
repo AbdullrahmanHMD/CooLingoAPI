@@ -21,10 +21,10 @@ user_add_args.add_argument("email", type=str, help="The email of the user", requ
 user_add_args.add_argument("password", type=str, help="The password of the user", required=True)
 
 user_delete_args = reqparse.RequestParser()
-user_delete_args.add_argument("user_id", type=int, help="The ID of the user", required=True)
+user_delete_args.add_argument("email", type=str, help="The email of the user", required=True)
 
 user_get_args = reqparse.RequestParser()
-user_get_args.add_argument("user_id", type=int, help="The ID of the user", required=True)
+user_get_args.add_argument("email", type=str, help="The email of the user", required=True)
 # ------------------------------------------------------------------------------------------------------
 
 db_mgr = DbManager()
