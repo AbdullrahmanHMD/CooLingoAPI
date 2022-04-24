@@ -72,7 +72,7 @@ class DbManager():
     
     def get_user(self, email : str):
         
-        user_id = sha256(email)
+        user_id = sha1(email.encode('utf-8')).hexdigest()
         key = {self.COLUMNS[0] : user_id}
         
         try:
@@ -91,7 +91,7 @@ class DbManager():
     
     def delete_user(self, email : str):
         
-        user_id = sha256(email)
+        user_id = sha1(email.encode('utf-8')).hexdigest()
         key = {self.COLUMNS[0] : user_id}
         
         try:
