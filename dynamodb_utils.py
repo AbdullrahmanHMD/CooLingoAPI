@@ -32,13 +32,13 @@ class DbManager():
  
         return response
 
-    def add_user(self, user_id : int, age : int,
+    def add_user(self, user_id : str, age : int,
                 email : str, first_name : str,
                 last_name : str, password : str):
         """_summary_
             Given a user's information, adds a user to the Users database.
         Args:
-            user_id (int): the ID of the user (This should be unique for each user)
+            user_id (str): the ID of the user (This should be unique for each user)
             age (int): the age of the user.
             email (str): the email of the user.
             first_name (str): the first name of the user.

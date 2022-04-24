@@ -13,7 +13,7 @@ COLUMNS = ['user_id', 'age', 'email',
             'first_name', 'last_name', 'password']
 
 # Adding the query arguments:
-user_add_args.add_argument("user_id", type=int, help="The ID of the user", required=True)
+user_add_args.add_argument("user_id", type=str, help="The ID of the user", required=True)
 user_add_args.add_argument("age", type=int, help="The age of the user", required=True)
 user_add_args.add_argument("first_name", type=str, help="The first name of the user", required=True)
 user_add_args.add_argument("last_name", type=str, help="The last name of the user", required=True)
