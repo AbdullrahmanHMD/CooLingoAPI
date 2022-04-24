@@ -13,7 +13,7 @@ COLUMNS = ['user_id', 'age', 'email',
             'first_name', 'last_name', 'password']
 
 # Adding the query arguments:
-user_add_args.add_argument("user_id", type=str, help="The ID of the user", required=True)
+# user_add_args.add_argument("user_id", type=str, help="The ID of the user", required=True)
 user_add_args.add_argument("age", type=int, help="The age of the user", required=True)
 user_add_args.add_argument("first_name", type=str, help="The first name of the user", required=True)
 user_add_args.add_argument("last_name", type=str, help="The last name of the user", required=True)
@@ -43,10 +43,10 @@ class User(Resource):
     def get(self):
         # abort_on_user_does_not_exist(user_id)
         args = user_get_args.parse_args()
-        user_id = args['user_id']
-        response = db_mgr.get_user(user_id=user_id)
+        email = args['email']
+        response = db_mgr.get_user(email=email)
         
-        json_response = {db_mgr.COLUMNS[0]: str(response[db_mgr.COLUMNS[0]]),
+        json_response = {db_mgr.COLUMNS[0]: response[db_mgr.COLUMNS[0]],
                         db_mgr.COLUMNS[1]: str(response[db_mgr.COLUMNS[1]]),
                         db_mgr.COLUMNS[2]: response[db_mgr.COLUMNS[2]],
                         db_mgr.COLUMNS[3]: response[db_mgr.COLUMNS[3]],
@@ -64,7 +64,7 @@ class User(Resource):
         # the user's info.
         args = user_add_args.parse_args()
         
-        response = db_mgr.add_user(user_id=args['user_id'], age=args['age'],
+        response = db_mgr.add_user(age=args['age'],
                                     first_name=args['first_name'], last_name=args['last_name'],
                                     email=args['email'], password=args['password'])
 
@@ -74,9 +74,9 @@ class User(Resource):
         
         # abort_on_user_does_not_exist(user_id)
         args = user_delete_args.parse_args()
-        user_id = args['user_id']
+        email = args['email']
         
-        return db_mgr.delete_user(user_id=user_id)
+        return db_mgr.delete_user(email=email)
 
 api.add_resource(User, "/users")
     

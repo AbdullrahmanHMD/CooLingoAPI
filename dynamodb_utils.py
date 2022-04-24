@@ -2,7 +2,7 @@ import boto3
 import pandas as pd
 import logger
 from botocore.exceptions import ClientError
-
+from hashlib import sha256
 
 class DbManager():
 
@@ -32,7 +32,7 @@ class DbManager():
  
         return response
 
-    def add_user(self, user_id : str, age : int,
+    def add_user(self, age : int,
                 email : str, first_name : str,
                 last_name : str, password : str):
         """_summary_
@@ -48,7 +48,7 @@ class DbManager():
         Returns:
             response: the response from the database.
         """
-
+        user_id = sha256(email)
         new_user = {
             self.COLUMNS[0] : user_id,
             self.COLUMNS[1] : age,
@@ -63,15 +63,16 @@ class DbManager():
         except ClientError as err:
             error_msg = err.response['Error']['Message']
             error_code = err.response['Error']['Code']
-            logger.error('Could not add user with ID: %d from table %s. %s: %s',
+            logger.error('Could not add user with ID: %s from table %s. %s: %s',
                          user_id, self.USERS_TABLE_NAME,
                          error_code, error_msg)
             response = None
             raise        
         return response
     
-    def get_user(self, user_id : int):
+    def get_user(self, email : str):
         
+        user_id = sha256(email)
         key = {self.COLUMNS[0] : user_id}
         
         try:
@@ -88,7 +89,9 @@ class DbManager():
             raise        
         return response
     
-    def delete_user(self, user_id : int):
+    def delete_user(self, email : str):
+        
+        user_id = sha256(email)
         key = {self.COLUMNS[0] : user_id}
         
         try:
