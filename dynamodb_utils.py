@@ -2,7 +2,7 @@ import boto3
 import pandas as pd
 import logger
 from botocore.exceptions import ClientError
-from hashlib import sha256
+from hashlib import sha1, shake_128
 
 class DbManager():
 
@@ -48,7 +48,7 @@ class DbManager():
         Returns:
             response: the response from the database.
         """
-        user_id = sha256(email)
+        user_id = sha1(email.encode('utf-8')).hexdigest()
         new_user = {
             self.COLUMNS[0] : user_id,
             self.COLUMNS[1] : age,
