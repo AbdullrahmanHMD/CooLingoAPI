@@ -124,10 +124,9 @@ class DbManager():
             user = self.USERS_TABLE.get_item(Key=key)
             old_word_list = user['words']
             for word in words:
-                old_word_list.append(word)
+                old_word_list[word] = 0
             
-            new_word_list = list(set(old_word_list))
-            user['words'] = new_word_list
+            user['words'] = old_word_list
             response = self.USERS_TABLE.put_item(Item=user)['item']
             
             
