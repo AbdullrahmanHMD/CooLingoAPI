@@ -14,17 +14,26 @@ COLUMNS = ['user_id', 'age', 'email',
 
 # Adding the query arguments:
 # user_add_args.add_argument("user_id", type=str, help="The ID of the user", required=True)
+
+# --- Adding a new user arguments -----------------------------------------------------------------------------------
+
 user_add_args.add_argument("age", type=int, help="The age of the user", required=True)
 user_add_args.add_argument("first_name", type=str, help="The first name of the user", required=True)
 user_add_args.add_argument("last_name", type=str, help="The last name of the user", required=True)
 user_add_args.add_argument("email", type=str, help="The email of the user", required=True)
 user_add_args.add_argument("password", type=str, help="The password of the user", required=True)
 
+# --- Deleting a  user arguments ------------------------------------------------------------------------------------
+
 user_delete_args = reqparse.RequestParser()
 user_delete_args.add_argument("email", type=str, help="The email of the user", required=True)
 
+# --- Getting a user arguments --------------------------------------------------------------------------------------
+
 user_get_args = reqparse.RequestParser()
 user_get_args.add_argument("email", type=str, help="The email of the user", required=True)
+
+# --- Adding a word arguments ---------------------------------------------------------------------------------------
 
 user_add_words_args = reqparse.RequestParser()
 user_add_words_args.add_argument("email", type=str, help="The email of the user", required=True)
@@ -44,6 +53,8 @@ db_mgr = DbManager()
 #         abort(409, message="User already exists")
 
 class User(Resource):
+    
+    @app.route('/users')
     def get(self):
         # abort_on_user_does_not_exist(user_id)
         args = user_get_args.parse_args()
@@ -60,7 +71,7 @@ class User(Resource):
         
         return json_response
 
-    
+    @app.route('/users')
     def post(self):
         # abort_on_user_exists(user_id)
         
@@ -74,6 +85,7 @@ class User(Resource):
 
         return response
     
+    @app.route('/users')
     def delete(self):
         
         # abort_on_user_does_not_exist(user_id)
@@ -82,6 +94,7 @@ class User(Resource):
         
         return db_mgr.delete_user(email=email)
     
+    @app.route('/words')
     def patch(self):
         args = user_add_words_args.parse_args()
         email = args['email']
@@ -89,7 +102,7 @@ class User(Resource):
         
         return db_mgr.add_words(email=email, words=words)
 
-api.add_resource(User, "/users")
+api.add_resource(User, "/")
     
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8080, debug=True)
