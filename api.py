@@ -88,9 +88,9 @@ class User(Resource):
         # the user's info.
         args = user_add_args.parse_args()
         
-        response = db_mgr.add_user(age=args['age'],
-                                    first_name=args['first_name'], last_name=args['last_name'],
-                                    email=args['email'], password=args['password'])
+        response = db_mgr.add_user(age=args['age'], first_name=args['first_name'],
+                                   last_name=args['last_name'], email=args['email'],
+                                   password=args['password'])
 
         return response
     

@@ -68,18 +68,17 @@ class DbManager():
             self.COLUMNS[8] : DEFAULT_LANGUAGE_ERROR_NUM,
             self.COLUMNS[9] : AVG_LNG_ERROR_NUM,
             self.COLUMNS[10] : DEFUALT_NUM_OF_LOGINS
-            
             }
         try:
             response_ = self.USERS_TABLE.put_item(Item=new_user)
-            response_ = 'Success'
+            
         except ClientError as err:
             error_msg = err.response['Error']['Message']
             error_code = err.response['Error']['Code']
-            logger.error('Could not add user with ID: %s from table %s. %s: %s',
+            print('Could not add user with ID: %s from table %s. %s: %s',
                          user_id, self.USERS_TABLE_NAME,
                          error_code, error_msg)
-            response_ = 'Fail'
+            response_ = None
             raise        
         return response_
     
