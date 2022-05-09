@@ -83,7 +83,7 @@ class User(Resource):
         return db_mgr.delete_user(email=email)
     
     def patch(self):
-        args = user_delete_args.parse_args()
+        args = user_add_words_args.parse_args()
         email = args['email']
         words = args['words']
         
