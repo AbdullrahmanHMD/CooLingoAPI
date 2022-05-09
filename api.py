@@ -76,7 +76,6 @@ class User(Resource):
                                    last_name=args['last_name'], email=args['email'],
                                    password=args['password'])
 
-        
         json_response = {"user": {
                 db_mgr.COLUMNS[1]: str(response[db_mgr.COLUMNS[1]]),
                 db_mgr.COLUMNS[2]: response[db_mgr.COLUMNS[2]],
@@ -84,7 +83,6 @@ class User(Resource):
                 db_mgr.COLUMNS[4]: response[db_mgr.COLUMNS[4]],
                     },
                          "status": status}
-        
         
         return json_response
     
@@ -101,6 +99,7 @@ class User(Resource):
 user_add_words_args = reqparse.RequestParser()
 user_add_words_args.add_argument("email", type=str, help="The email of the user", required=True)
 user_add_words_args.add_argument("words", type=str, help="The list of words the user want to learn", required=True, action='append')
+
 # --- Deleting a word arguments -------------------------------------------------------------------------------------
 
 user_delete_words_args = reqparse.RequestParser()
@@ -111,6 +110,7 @@ user_delete_words_args.add_argument("words", type=str, help="The list of words t
 
 user_get_words_args =  reqparse.RequestParser()
 user_get_words_args.add_argument("email", type=str, help="The email of the user", required=True)
+
 # ------------------------------------------------------------------------------------------------------------------
 
 class Word(Resource):
@@ -134,31 +134,50 @@ class Word(Resource):
         words = db_mgr.get_words(email) 
         return json.dumps(list(words))
 
-# --- Adding a word arguments ---------------------------------------------------------------------------------------
+# --- Adding language level arguments ---------------------------------------------------------------------------------------
 
 lang_lvl_add_args = reqparse.RequestParser()
-user_add_words_args.add_argument("email", type=str, help="The email of the user", required=True)
-user_add_words_args.add_argument("words", type=str, help="The list of words the user want to learn", required=True, action='append')
-# --- Deleting a word arguments -------------------------------------------------------------------------------------
+lang_lvl_add_args.add_argument("email", type=str, help="The email of the user", required=True)
+lang_lvl_add_args.add_argument("lang_lvl", type=str, help="The language level of the user", required=True, action='append')
 
-user_delete_words_args = reqparse.RequestParser()
-user_delete_words_args.add_argument("email", type=str, help="The email of the user", required=True)
-user_delete_words_args.add_argument("words", type=str, help="The list of words the user wants to delete", required=True, action='append')
+# --- Updating language level arguments -------------------------------------------------------------------------------------
 
-# --- Getting the words list arguments ------------------------------------------------------------------------------
+lang_lvl_update_args = reqparse.RequestParser()
+lang_lvl_update_args.add_argument("email", type=str, help="The email of the user", required=True)
+lang_lvl_update_args.add_argument("lang_lvl", type=str, help="The new language level of the user", required=True, action='append')
 
-user_get_words_args =  reqparse.RequestParser()
-user_get_words_args.add_argument("email", type=str, help="The email of the user", required=True)
+# --- Getting language level arguments ------------------------------------------------------------------------------
+
+lang_lvl_get_args =  reqparse.RequestParser()
+lang_lvl_get_args.add_argument("email", type=str, help="The email of the user", required=True)
+
 # ------------------------------------------------------------------------------------------------------------------
-    
+
 class LanguageLevel(Resource):
     def post(self):
-        pass
+        args = lang_lvl_add_args.parse_args()
 
     def get(self):
         pass
     
+    def patch(self):
+        pass
     
+    
+login_args = reqparse.RequestParser()
+login_args.add_argument("email", type=str, help="", required=True)
+login_args.add_argument("password", type=str, help="", required=True)
+    
+class Authentication(Resource):
+    def post(self):
+        args = login_args.parse_args()
+        email = args['email']
+        password = args['password']
+        response, status = db_mgr.authenticate(email=email, password=password)
+        
+        return response, status
+        
+api.add_resource(Authentication, "/auth")    
 api.add_resource(User, "/users")
 api.add_resource(Word, "/words")
     

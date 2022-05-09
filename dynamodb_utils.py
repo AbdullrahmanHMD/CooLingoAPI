@@ -197,3 +197,24 @@ class DbManager():
         return words_list
         
     
+    def authenticate(self, email : str, password : str):
+        user = self.get_user(email)
+        
+        status = None
+        response = None
+        
+        if password == user['password']:
+            status = 'success'
+            response = user
+        
+        else:
+            status = 'fail'
+            
+        return response, status        
+        
+    
+    def get_key(self, email : str):
+        user_id = sha1(email.encode('utf-8')).hexdigest()
+        key = {self.COLUMNS[0] : user_id}
+        
+        return key
