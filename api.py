@@ -43,6 +43,11 @@ user_add_words_args.add_argument("words", type=str, help="The list of words the 
 user_delete_words_args = reqparse.RequestParser()
 user_delete_words_args.add_argument("email", type=str, help="The email of the user", required=True)
 user_delete_words_args.add_argument("words", type=str, help="The list of words the user wants to delete", required=True, action='append')
+
+# --- Getting the words list arguments ------------------------------------------------------------------------------
+
+user_get_words_args =  reqparse.RequestParser()
+user_get_words_args.add_argument("email", type=str, help="The email of the user", required=True)
 # ------------------------------------------------------------------------------------------------------
 
 db_mgr = DbManager()
@@ -112,8 +117,14 @@ class Word(Resource):
         words = args['words']
         
         return db_mgr.delete_words(email=email, words=words)
- 
-        
+    
+    def get(self):
+        args = user_get_words_args.parse_args()
+        email = args['email']
+        words = db_mgr.get_words(email) 
+        print(words)
+        return words     
+      
 api.add_resource(User, "/users")
 api.add_resource(Word, "/words")
     

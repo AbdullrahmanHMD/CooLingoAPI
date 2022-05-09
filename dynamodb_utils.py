@@ -169,6 +169,13 @@ class DbManager():
         
         return response
         
+    def get_words(self, email):
+        user_id = sha1(email.encode('utf-8')).hexdigest()
+        key = {self.COLUMNS[0] : user_id}
         
+        user = self.USERS_TABLE.get_item(Key=key)['Item']
+        words_list = user['words']
+        
+        return words_list
         
     
