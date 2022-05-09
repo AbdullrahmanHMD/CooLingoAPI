@@ -36,7 +36,7 @@ class DbManager():
     def add_user(self, age : int,
                 email : str, first_name : str,
                 last_name : str, password : str,
-                words : list):
+                ):
         """_summary_
             Given a user's information, adds a user to the Users database.
         Args:
