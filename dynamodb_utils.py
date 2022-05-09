@@ -128,12 +128,12 @@ class DbManager():
         
         try:
             user = self.USERS_TABLE.get_item(Key=key)['Item']
-            new_word_list = user['words']
+            new_word_list = list(user['words'])
             for word in words:
                 if not (word in new_word_list):
                     new_word_list.append(word)
             
-            user['words'] = new_word_list
+            user['words'] = set(new_word_list)
             response = self.USERS_TABLE.put_item(Item=user)
             
             
