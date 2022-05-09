@@ -52,7 +52,7 @@ class DbManager():
         """
         user_id = sha1(email.encode('utf-8')).hexdigest()
         
-        DEFAULT_WORDS_LIST = []
+        DEFAULT_WORDS_LIST = {}
         
         new_user = {
             self.COLUMNS[0] : user_id,
