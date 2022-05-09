@@ -33,22 +33,6 @@ user_delete_args.add_argument("email", type=str, help="The email of the user", r
 user_get_args = reqparse.RequestParser()
 user_get_args.add_argument("email", type=str, help="The email of the user", required=True)
 
-# --- Adding a word arguments ---------------------------------------------------------------------------------------
-
-user_add_words_args = reqparse.RequestParser()
-user_add_words_args.add_argument("email", type=str, help="The email of the user", required=True)
-user_add_words_args.add_argument("words", type=str, help="The list of words the user want to learn", required=True, action='append')
-# --- Deleting a word arguments -------------------------------------------------------------------------------------
-
-user_delete_words_args = reqparse.RequestParser()
-user_delete_words_args.add_argument("email", type=str, help="The email of the user", required=True)
-user_delete_words_args.add_argument("words", type=str, help="The list of words the user wants to delete", required=True, action='append')
-
-# --- Getting the words list arguments ------------------------------------------------------------------------------
-
-user_get_words_args =  reqparse.RequestParser()
-user_get_words_args.add_argument("email", type=str, help="The email of the user", required=True)
-# ------------------------------------------------------------------------------------------------------
 
 db_mgr = DbManager()
 
@@ -88,11 +72,21 @@ class User(Resource):
         # the user's info.
         args = user_add_args.parse_args()
         
-        response = db_mgr.add_user(age=args['age'], first_name=args['first_name'],
+        response, status = db_mgr.add_user(age=args['age'], first_name=args['first_name'],
                                    last_name=args['last_name'], email=args['email'],
                                    password=args['password'])
 
-        return response
+        
+        json_response = {"user": {
+                db_mgr.COLUMNS[1]: str(response[db_mgr.COLUMNS[1]]),
+                db_mgr.COLUMNS[2]: response[db_mgr.COLUMNS[2]],
+                db_mgr.COLUMNS[3]: response[db_mgr.COLUMNS[3]],
+                db_mgr.COLUMNS[4]: response[db_mgr.COLUMNS[4]],
+                    },
+                         "status": status}
+        
+        
+        return json_response
     
     def delete(self):
         
@@ -102,6 +96,22 @@ class User(Resource):
         
         return db_mgr.delete_user(email=email)
     
+# --- Adding a word arguments ---------------------------------------------------------------------------------------
+
+user_add_words_args = reqparse.RequestParser()
+user_add_words_args.add_argument("email", type=str, help="The email of the user", required=True)
+user_add_words_args.add_argument("words", type=str, help="The list of words the user want to learn", required=True, action='append')
+# --- Deleting a word arguments -------------------------------------------------------------------------------------
+
+user_delete_words_args = reqparse.RequestParser()
+user_delete_words_args.add_argument("email", type=str, help="The email of the user", required=True)
+user_delete_words_args.add_argument("words", type=str, help="The list of words the user wants to delete", required=True, action='append')
+
+# --- Getting the words list arguments ------------------------------------------------------------------------------
+
+user_get_words_args =  reqparse.RequestParser()
+user_get_words_args.add_argument("email", type=str, help="The email of the user", required=True)
+# ------------------------------------------------------------------------------------------------------------------
 
 class Word(Resource):
     def post(self):
@@ -123,7 +133,32 @@ class Word(Resource):
         email = args['email']
         words = db_mgr.get_words(email) 
         return json.dumps(list(words))
-      
+
+# --- Adding a word arguments ---------------------------------------------------------------------------------------
+
+lang_lvl_add_args = reqparse.RequestParser()
+user_add_words_args.add_argument("email", type=str, help="The email of the user", required=True)
+user_add_words_args.add_argument("words", type=str, help="The list of words the user want to learn", required=True, action='append')
+# --- Deleting a word arguments -------------------------------------------------------------------------------------
+
+user_delete_words_args = reqparse.RequestParser()
+user_delete_words_args.add_argument("email", type=str, help="The email of the user", required=True)
+user_delete_words_args.add_argument("words", type=str, help="The list of words the user wants to delete", required=True, action='append')
+
+# --- Getting the words list arguments ------------------------------------------------------------------------------
+
+user_get_words_args =  reqparse.RequestParser()
+user_get_words_args.add_argument("email", type=str, help="The email of the user", required=True)
+# ------------------------------------------------------------------------------------------------------------------
+    
+class LanguageLevel(Resource):
+    def post(self):
+        pass
+
+    def get(self):
+        pass
+    
+    
 api.add_resource(User, "/users")
 api.add_resource(Word, "/words")
     

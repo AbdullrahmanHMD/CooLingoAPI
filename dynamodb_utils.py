@@ -25,7 +25,7 @@ class DbManager():
         # Defining the available columns in the database.
         self.COLUMNS = ['user_id', 'age', 'email',
                 'first_name', 'last_name', 'password', 'words',
-                'language_level', 'lng_error_num', 'num_of_logins', 'avg_lng_error_num']
+                'language_level', 'lng_error_num', 'avg_lng_error_num', 'num_of_logins']
 
 
     def add_user_dict(self, new_user):
@@ -51,10 +51,13 @@ class DbManager():
         """
         user_id = sha1(email.encode('utf-8')).hexdigest()
         
+        status = 'None'
+        
         DEFAULT_WORDS_LIST = []
         DEFAULT_LANGUAGE_LEVEL = "N/A"
-        DEFAULT_LANGUAGE_ERROR_NUM = AVG_LNG_ERROR_NUM = 0
+        DEFAULT_LANGUAGE_ERROR_NUM = DEFAULT_AVG_LNG_ERROR_NUM = 0
         DEFUALT_NUM_OF_LOGINS = 1
+        
         
         new_user = {
             self.COLUMNS[0] : user_id,
@@ -66,12 +69,18 @@ class DbManager():
             self.COLUMNS[6] : DEFAULT_WORDS_LIST,
             self.COLUMNS[7] : DEFAULT_LANGUAGE_LEVEL,
             self.COLUMNS[8] : DEFAULT_LANGUAGE_ERROR_NUM,
-            self.COLUMNS[9] : AVG_LNG_ERROR_NUM,
+            self.COLUMNS[9] : DEFAULT_AVG_LNG_ERROR_NUM,
             self.COLUMNS[10] : DEFUALT_NUM_OF_LOGINS
             }
         try:
             response_ = self.USERS_TABLE.put_item(Item=new_user)
-            
+            response_ = {
+                self.COLUMNS[1] : age,
+                self.COLUMNS[2] : email,
+                self.COLUMNS[3] : first_name,
+                self.COLUMNS[4] : last_name,
+                self.COLUMNS[5] : password}
+            status = 'success'
         except ClientError as err:
             error_msg = err.response['Error']['Message']
             error_code = err.response['Error']['Code']
@@ -79,8 +88,9 @@ class DbManager():
                          user_id, self.USERS_TABLE_NAME,
                          error_code, error_msg)
             response_ = None
+            status = 'fail'
             raise        
-        return response_
+        return response_, status
     
     def get_user(self, email : str):
         
