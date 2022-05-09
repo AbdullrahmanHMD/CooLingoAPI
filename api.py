@@ -135,13 +135,13 @@ class Word(Resource):
 
 lang_lvl_add_args = reqparse.RequestParser()
 lang_lvl_add_args.add_argument("email", type=str, help="The email of the user", required=True)
-lang_lvl_add_args.add_argument("lang_lvl", type=str, help="The language level of the user", required=True, action='append')
+lang_lvl_add_args.add_argument("lang_lvl", type=str, help="The language level of the user", required=True)
 
 # --- Updating language level arguments -------------------------------------------------------------------------------------
 
 lang_lvl_update_args = reqparse.RequestParser()
 lang_lvl_update_args.add_argument("email", type=str, help="The email of the user", required=True)
-lang_lvl_update_args.add_argument("lang_lvl", type=str, help="The new language level of the user", required=True, action='append')
+lang_lvl_update_args.add_argument("lang_lvl", type=str, help="The new language level of the user", required=True)
 
 # --- Getting language level arguments ------------------------------------------------------------------------------
 
