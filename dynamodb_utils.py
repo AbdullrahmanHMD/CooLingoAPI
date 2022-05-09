@@ -24,7 +24,8 @@ class DbManager():
 
         # Defining the available columns in the database.
         self.COLUMNS = ['user_id', 'age', 'email',
-                'first_name', 'last_name', 'password', 'words']
+                'first_name', 'last_name', 'password', 'words',
+                'language_level', 'lng_error_num', 'num_of_logins', 'avg_lng_error_num']
 
 
     def add_user_dict(self, new_user):
@@ -52,6 +53,9 @@ class DbManager():
         user_id = sha1(email.encode('utf-8')).hexdigest()
         
         DEFAULT_WORDS_LIST = set()
+        DEFAULT_LANGUAGE_LEVEL = "N/A"
+        DEFAULT_LANGUAGE_ERROR_NUM = AVG_LNG_ERROR_NUM = 0
+        DEFUALT_NUM_OF_LOGINS = 1
         
         new_user = {
             self.COLUMNS[0] : user_id,
@@ -60,18 +64,23 @@ class DbManager():
             self.COLUMNS[3] : first_name,
             self.COLUMNS[4] : last_name,
             self.COLUMNS[5] : password,
-            self.COLUMNS[6] : DEFAULT_WORDS_LIST
+            self.COLUMNS[6] : DEFAULT_WORDS_LIST,
+            self.COLUMNS[7] : DEFAULT_LANGUAGE_LEVEL,
+            self.COLUMNS[8] : DEFAULT_LANGUAGE_ERROR_NUM,
+            self.COLUMNS[9] : AVG_LNG_ERROR_NUM,
+            self.COLUMNS[10] : DEFUALT_NUM_OF_LOGINS
+            
             }
         try:
             response = self.USERS_TABLE.put_item(Item=new_user)
-
+            response = 'Success'
         except ClientError as err:
             error_msg = err.response['Error']['Message']
             error_code = err.response['Error']['Code']
             logger.error('Could not add user with ID: %s from table %s. %s: %s',
                          user_id, self.USERS_TABLE_NAME,
                          error_code, error_msg)
-            response = None
+            response = 'Fail'
             raise        
         return response
     
