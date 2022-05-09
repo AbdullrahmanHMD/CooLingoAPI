@@ -19,8 +19,6 @@ user_add_args.add_argument("first_name", type=str, help="The first name of the u
 user_add_args.add_argument("last_name", type=str, help="The last name of the user", required=True)
 user_add_args.add_argument("email", type=str, help="The email of the user", required=True)
 user_add_args.add_argument("password", type=str, help="The password of the user", required=True)
-user_add_args.add_argument("words", type=str, help="The list of words the user want to learn", required=True)
-# user_add_args.add_argument("password", type=str, help="The password of the user", required=True)
 
 user_delete_args = reqparse.RequestParser()
 user_delete_args.add_argument("email", type=str, help="The email of the user", required=True)
