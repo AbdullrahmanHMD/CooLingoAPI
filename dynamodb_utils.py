@@ -125,7 +125,7 @@ class DbManager():
             for word in words:
                 new_word_list.append(word)
             
-            user['words'] = set(new_word_list)
+            user['words'] = list(set(new_word_list))
             response = self.USERS_TABLE.put_item(Item=user)
             
             
