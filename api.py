@@ -157,9 +157,9 @@ class LanguageLevel(Resource):
         email = args['email']
         lang_lvl = args['lang_lvl']
         
-        response, status = db_mgr.add_language_level(email=email, lang_lvl=lang_lvl)
+        response = db_mgr.add_language_level(email=email, lang_lvl=lang_lvl)
         
-        return response, status
+        return response
 
     def get(self):
         args = lang_lvl_get_args.parse_args()
