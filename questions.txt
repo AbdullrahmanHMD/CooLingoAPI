@@ -1,0 +1,112 @@
+{
+  "questions": [
+    {
+      "question" : "Choose the correct answer. Only one answer is correct.",
+      "answers": ["What is your age?",
+             "How many years you have?", 
+             "How old you are?", 
+             "What age do you have?"],
+      "correct": 0
+    },
+    {
+      "question" : "John bought ________ cheese.",
+      "answers": ["enough of", "too many", "fewer", "more"],
+      "correct": 3
+    },
+    {
+      "question" : "Choose the correct answer. Only one answer is correct.",
+      "answers": ["What pencils made of?",
+              "What are pencils made of?",
+              "What pencils are they made of?", 
+              "What are made of pencils?"],
+      "correct": 1
+    },
+    {
+      "question" : "________ like music.",
+      "answers": ["The both girls", "Both this girls", "Both of them", "Both they"],
+      "correct": 2
+    },
+    {
+      "question" : "What ________ on Saturday.",
+      "answers": ["Ken usually does", "does Ken usually", "usually does Ken do", "does Ken usually do"],
+      "correct": 3
+    },
+    {
+      "question" : "There isn’t ________ in the garden.",
+      "answers": ["anyone", "no person", "persons", "any people"],
+      "correct": 0
+    },
+    {
+      "question" : "He thinks John ________",
+      "answers": ["the same as I",
+              "is the same as me",
+              "is same as me",
+              "is the same I am"],
+      "correct": 1
+    },
+    {
+      "question" : "Cathie has read ________ French books.",
+      "answers": ["so much", "a few", "the more", "every"],
+      "correct": 1
+    },
+    {
+      "question" : "When ________, I’ll talk to him.",
+      "answers": ["does Peter come",
+              "Peter will come",
+              "Peter comes",
+              "can Peter come"],
+      "correct": 2
+    },
+    {
+      "question" : "I don’t know ________ geography.",
+      "answers": ["something about",
+              "anything about",
+              "something of",
+              "anything of"],
+      "correct": 1
+    },
+    {
+      "question" : "Next year we’re going to stay there ________ a week.",
+      "answers": ["in", "through", "during", "for"],
+      "correct": 3
+    },
+    {
+      "question" : "Is Chris ________ Kate?",
+      "answers": ["taller that", "so tall as", "as tall as", "taller as"],
+      "correct": 2
+    },
+    {
+      "question" : "Tom gave us ________ apples.",
+      "answers": ["a lot of", "so much", "same", "this"],
+      "correct": 0
+    },
+    {
+      "question" : "________ those newspapers have you read?",
+      "answers": ["in", "through", "during", "for"],
+      "correct": 3
+    },
+    {
+      "question" : "It was raining when Mary ________ the bus.",
+      "answers": ["waited", "expected", "was expecting", "was waiting for"],
+      "correct": 3
+    },
+    {
+      "question" : "Have you been to the museum?",
+      "answers": ["Not yet.", "Not already.", "Not ever.", "Not still"],
+      "correct": 0
+    },
+    {
+      "question" : "What kind of watch shall I buy? Get ________.",
+      "answers": ["one Swiss", "a French", "a Japanese one", "some American one"],
+      "correct": 2
+    },
+    {
+      "question" : "Mary doesn’t speak Russian.",
+      "answers": ["Laura doesn’t either.",
+              "Neither Laura does.",
+              "Laura doesn’t neither.",
+              "Laura doesn’t too."],
+      "correct": 0
+    }
+  ]
+}
