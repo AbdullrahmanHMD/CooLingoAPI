@@ -213,6 +213,25 @@ class DbManager():
         return response, status        
         
     
+    def add_language_level(self, email : str, lang_lvl : str):
+        user = self.get_user(email)
+        
+        status = None
+        response = None
+        
+        user['language_level'] = lang_lvl
+        
+        response = self.USERS_TABLE.put_item(Item=user)
+        
+        return response
+    
+    def get_language_level(self, email : str):
+        user = self.get_user(email)
+        lang_lvl = user['language_level'] 
+        
+        return lang_lvl
+        
+    
     def get_key(self, email : str):
         user_id = sha1(email.encode('utf-8')).hexdigest()
         key = {self.COLUMNS[0] : user_id}

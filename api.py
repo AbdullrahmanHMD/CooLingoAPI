@@ -7,16 +7,13 @@ from utils import *
 app = Flask(__name__)
 api = Api(app)
 
-user_add_args = reqparse.RequestParser()
 
 COLUMNS = ['user_id', 'age', 'email',
             'first_name', 'last_name', 'password']
 
-# Adding the query arguments:
-# user_add_args.add_argument("user_id", type=str, help="The ID of the user", required=True)
-
 # --- Adding a new user arguments -----------------------------------------------------------------------------------
 
+user_add_args = reqparse.RequestParser()
 user_add_args.add_argument("age", type=int, help="The age of the user", required=True)
 user_add_args.add_argument("first_name", type=str, help="The first name of the user", required=True)
 user_add_args.add_argument("last_name", type=str, help="The last name of the user", required=True)
@@ -156,17 +153,40 @@ lang_lvl_get_args.add_argument("email", type=str, help="The email of the user", 
 class LanguageLevel(Resource):
     def post(self):
         args = lang_lvl_add_args.parse_args()
+        
+        email = args['email']
+        lang_lvl = args['lang_lvl']
+        
+        response, status = db_mgr.add_language_level(email=email, lang_lvl=lang_lvl)
+        
+        return response, status
 
     def get(self):
-        pass
+        args = lang_lvl_get_args.parse_args()
+        
+        email = args['email']
+        
+        response, status = db_mgr.get_language_level(email=email)
+        
+        return response, status
     
     def patch(self):
-        pass
-    
+        args = lang_lvl_update_args.parse_args()
+        
+        email = args['email']
+        lang_lvl = args['lang_lvl']
+        
+        response, status = db_mgr.add_language_level(email=email, lang_lvl=lang_lvl)
+        
+        return response, status
+
+# --- User authentication arguments ---------------------------------------------------------------------------------------
     
 login_args = reqparse.RequestParser()
 login_args.add_argument("email", type=str, help="", required=True)
 login_args.add_argument("password", type=str, help="", required=True)
+
+# ------------------------------------------------------------------------------------------------------------------
     
 class Authentication(Resource):
     def post(self):
@@ -180,6 +200,7 @@ class Authentication(Resource):
 api.add_resource(Authentication, "/auth")    
 api.add_resource(User, "/users")
 api.add_resource(Word, "/words")
+api.add_resource(Word, "/lang_lvl")
     
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8080, debug=True)
