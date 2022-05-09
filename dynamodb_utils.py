@@ -24,8 +24,7 @@ class DbManager():
 
         # Defining the available columns in the database.
         self.COLUMNS = ['user_id', 'age', 'email',
-                'first_name', 'last_name', 'password'
-                , 'words']
+                'first_name', 'last_name', 'password', 'words']
 
 
     def add_user_dict(self, new_user):
@@ -121,13 +120,13 @@ class DbManager():
         key = {self.COLUMNS[0] : user_id}
         
         try:
-            user = self.USERS_TABLE.get_item(Key=key)
+            user = self.USERS_TABLE.get_item(Key=key)['Item']
             old_word_list = user['words']
             for word in words:
                 old_word_list[word] = 0
             
             user['words'] = old_word_list
-            response = self.USERS_TABLE.put_item(Item=user)['item']
+            response = self.USERS_TABLE.put_item(Item=user)['Item']
             
             
         except ClientError as err:
