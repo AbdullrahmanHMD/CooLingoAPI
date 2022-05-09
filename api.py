@@ -193,11 +193,18 @@ class Authentication(Resource):
         response, status = db_mgr.authenticate(email=email, password=password)
         
         return response, status
-        
+
+class Questions(Resource):
+    def get(self):
+        from question_extractor import QUESTIONS_JSON_ARRAY
+        return QUESTIONS_JSON_ARRAY
+
+
 api.add_resource(Authentication, "/auth")    
 api.add_resource(User, "/users")
 api.add_resource(Word, "/words")
 api.add_resource(LanguageLevel, "/lang_lvl")
-    
+api.add_resource(Questions, "/questions")
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8080, debug=True)
