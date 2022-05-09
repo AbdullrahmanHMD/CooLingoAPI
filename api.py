@@ -2,7 +2,7 @@ from flask import Flask
 from flask_restful import Api, Resource, reqparse, abort
 from dynamodb_utils import *
 import json
-import utils
+from utils import *
 
 app = Flask(__name__)
 api = Api(app)
@@ -122,8 +122,7 @@ class Word(Resource):
         args = user_get_words_args.parse_args()
         email = args['email']
         words = db_mgr.get_words(email) 
-        print(words)
-        return words     
+        return serialize_list(words)
       
 api.add_resource(User, "/users")
 api.add_resource(Word, "/words")

@@ -15,3 +15,12 @@ class DecimalJsonEncoder(json.JSONDecoder):
         return json.JSONEncoder.default(self, obj)
         
 
+def serialize_list(list_):
+    response = "["
+    
+    for el in list_:
+        response += el 
+        response += ", "
+    response = response[:-2] + "]"
+    
+    return response
