@@ -38,6 +38,11 @@ user_get_args.add_argument("email", type=str, help="The email of the user", requ
 user_add_words_args = reqparse.RequestParser()
 user_add_words_args.add_argument("email", type=str, help="The email of the user", required=True)
 user_add_words_args.add_argument("words", type=str, help="The list of words the user want to learn", required=True, action='append')
+# --- Deleting a word arguments -------------------------------------------------------------------------------------
+
+user_delete_words_args = reqparse.RequestParser()
+user_delete_words_args.add_argument("email", type=str, help="The email of the user", required=True)
+user_delete_words_args.add_argument("words", type=str, help="The list of words the user wants to delete", required=True, action='append')
 # ------------------------------------------------------------------------------------------------------
 
 db_mgr = DbManager()
@@ -54,7 +59,6 @@ db_mgr = DbManager()
 
 class User(Resource):
     
-    @app.route('/users')
     def get(self):
         # abort_on_user_does_not_exist(user_id)
         args = user_get_args.parse_args()
@@ -71,7 +75,7 @@ class User(Resource):
         
         return json_response
 
-    @app.route('/users')
+    
     def post(self):
         # abort_on_user_exists(user_id)
         
@@ -85,7 +89,6 @@ class User(Resource):
 
         return response
     
-    @app.route('/users')
     def delete(self):
         
         # abort_on_user_does_not_exist(user_id)
@@ -94,15 +97,26 @@ class User(Resource):
         
         return db_mgr.delete_user(email=email)
     
-    @app.route('/words')
-    def patch(self):
+
+class Word(Resource):
+    def post(self):
         args = user_add_words_args.parse_args()
+        email = args['email']
+        words = args['words']
+
+        return db_mgr.add_words(email=email, words=words)
+    
+    def delete(self):
+        args = user_delete_words_args.parse_args()
         email = args['email']
         words = args['words']
         
         return db_mgr.add_words(email=email, words=words)
-
-api.add_resource(User, "/")
+ 
+ 
+        
+api.add_resource(User, "/users")
+api.add_resouce(Word, "/words")
     
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8080, debug=True)

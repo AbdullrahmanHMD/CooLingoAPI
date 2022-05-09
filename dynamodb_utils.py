@@ -121,11 +121,39 @@ class DbManager():
         
         try:
             user = self.USERS_TABLE.get_item(Key=key)['Item']
-            old_word_list = user['words']
+            new_word_list = user['words']
             for word in words:
-                old_word_list[word] = 0
+                new_word_list[word] = 0
             
-            user['words'] = old_word_list
+            user['words'] = new_word_list
+            response = self.USERS_TABLE.put_item(Item=user)
+            
+            
+        except ClientError as err:
+            error_msg = err.response['Error']['Message']
+            error_code = err.response['Error']['Code']
+            logger.error('Could not get user with ID: %s from table %s. %s: %s',
+                         user_id, self.USERS_TABLE_NAME,
+                         error_code, error_msg)
+
+            response = None
+            raise        
+        
+        return response
+    
+    
+    def delete_words(self, email, words : list):
+        
+        user_id = sha1(email.encode('utf-8')).hexdigest()
+        key = {self.COLUMNS[0] : user_id}
+        
+        try:
+            user = self.USERS_TABLE.get_item(Key=key)['Item']
+            new_word_list = user['words']
+            for word in words:
+                new_word_list.pop(word)
+            
+            user['words'] = new_word_list
             response = self.USERS_TABLE.put_item(Item=user)
             
             
