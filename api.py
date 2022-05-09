@@ -122,7 +122,7 @@ class Word(Resource):
         args = user_get_words_args.parse_args()
         email = args['email']
         words = db_mgr.get_words(email) 
-        return serialize_list(words)
+        return json.dumps(list(words))
       
 api.add_resource(User, "/users")
 api.add_resource(Word, "/words")

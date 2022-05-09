@@ -21,6 +21,6 @@ def serialize_list(list_):
     for el in list_:
         response += el 
         response += ", "
-    response = response[:-2] + "]"
+    response = response[:-1] + "]"
     
     return response
