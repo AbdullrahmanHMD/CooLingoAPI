@@ -28,7 +28,7 @@ user_get_args.add_argument("email", type=str, help="The email of the user", requ
 
 user_add_words_args = reqparse.RequestParser()
 user_add_words_args.add_argument("email", type=str, help="The email of the user", required=True)
-user_add_words_args.add_argument("words", type=list, help="The list of words the user want to learn", required=True)
+user_add_words_args.add_argument("words", type=list, help="The list of words the user want to learn", required=True, action='append')
 # ------------------------------------------------------------------------------------------------------
 
 db_mgr = DbManager()

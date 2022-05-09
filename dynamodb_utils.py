@@ -126,7 +126,7 @@ class DbManager():
                 old_word_list[word] = 0
             
             user['words'] = old_word_list
-            response = self.USERS_TABLE.put_item(Item=user)['Item']
+            response = self.USERS_TABLE.put_item(Item=user)
             
             
         except ClientError as err:
