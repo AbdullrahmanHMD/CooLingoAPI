@@ -51,7 +51,7 @@ class DbManager():
         """
         user_id = sha1(email.encode('utf-8')).hexdigest()
         
-        DEFAULT_WORDS_LIST = set([])
+        DEFAULT_WORDS_LIST = []
         DEFAULT_LANGUAGE_LEVEL = "N/A"
         DEFAULT_LANGUAGE_ERROR_NUM = AVG_LNG_ERROR_NUM = 0
         DEFUALT_NUM_OF_LOGINS = 1
@@ -130,7 +130,8 @@ class DbManager():
             user = self.USERS_TABLE.get_item(Key=key)['Item']
             new_word_list = user['words']
             for word in words:
-                new_word_list.add(word)
+                if not (word in new_word_list):
+                    new_word_list.append(word)
             
             user['words'] = new_word_list
             response = self.USERS_TABLE.put_item(Item=user)
