@@ -24,3 +24,10 @@ def serialize_list(list_):
     response = response[:-1] + "]"
     
     return response
+
+set_ = set()
+
+set_.add('x')
+
+print(set_)
+
