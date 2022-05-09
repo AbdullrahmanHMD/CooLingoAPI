@@ -168,8 +168,13 @@ class DbManager():
         try:
             user = self.USERS_TABLE.get_item(Key=key)['Item']
             new_word_list = user['words']
-            for word in words:
-                new_word_list.remove(word)
+            
+            if len(user['words']) <= len(words):
+                new_word_list = []    
+                
+            else:
+                for word in words:
+                    new_word_list.remove(word)
             
             user['words'] = new_word_list
             response = self.USERS_TABLE.put_item(Item=user)
