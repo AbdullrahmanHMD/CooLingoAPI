@@ -111,12 +111,11 @@ class Word(Resource):
         email = args['email']
         words = args['words']
         
-        return db_mgr.add_words(email=email, words=words)
- 
+        return db_mgr.delete_words(email=email, words=words)
  
         
 api.add_resource(User, "/users")
-api.add_resouce(Word, "/words")
+api.add_resource(Word, "/words")
     
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8080, debug=True)
