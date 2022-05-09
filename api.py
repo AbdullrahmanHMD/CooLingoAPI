@@ -72,7 +72,7 @@ class User(Resource):
         
         response = db_mgr.add_user(age=args['age'],
                                     first_name=args['first_name'], last_name=args['last_name'],
-                                    email=args['email'], password=args['password'], words=args['words'])
+                                    email=args['email'], password=args['password'])
 
         return response
     

@@ -51,6 +51,9 @@ class DbManager():
             response: the response from the database.
         """
         user_id = sha1(email.encode('utf-8')).hexdigest()
+        
+        DEFAULT_WORDS_LIST = []
+        
         new_user = {
             self.COLUMNS[0] : user_id,
             self.COLUMNS[1] : age,
@@ -58,7 +61,7 @@ class DbManager():
             self.COLUMNS[3] : first_name,
             self.COLUMNS[4] : last_name,
             self.COLUMNS[5] : password,
-            self.COLUMNS[6] : words
+            self.COLUMNS[6] : DEFAULT_WORDS_LIST
             }
         try:
             response = self.USERS_TABLE.put_item(Item=new_user)
