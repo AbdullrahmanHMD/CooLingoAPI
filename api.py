@@ -118,7 +118,8 @@ class Word(Resource):
         response, _ = db_mgr.add_words(email=email, words=words)
         return {"words": list(response)}
     
-    def delete(self):
+    # The PUT request deletes words from the word list.
+    def put(self):
         args = user_delete_words_args.parse_args()
         email = args['email']
         words = args['words']
