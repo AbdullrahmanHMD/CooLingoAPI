@@ -35,8 +35,7 @@ class DbManager():
 
     def add_user(self, age : int,
                 email : str, first_name : str,
-                last_name : str, password : str,
-                ):
+                last_name : str, password : str):
         """_summary_
             Given a user's information, adds a user to the Users database.
         Args:
@@ -72,17 +71,17 @@ class DbManager():
             
             }
         try:
-            response = self.USERS_TABLE.put_item(Item=new_user)
-            response = 'Success'
+            response_ = self.USERS_TABLE.put_item(Item=new_user)
+            response_ = 'Success'
         except ClientError as err:
             error_msg = err.response['Error']['Message']
             error_code = err.response['Error']['Code']
             logger.error('Could not add user with ID: %s from table %s. %s: %s',
                          user_id, self.USERS_TABLE_NAME,
                          error_code, error_msg)
-            response = 'Fail'
+            response_ = 'Fail'
             raise        
-        return response
+        return response_
     
     def get_user(self, email : str):
         
