@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 from flask_restful import Api, Resource, reqparse, abort
 from dynamodb_utils import *
 import json
@@ -47,8 +47,7 @@ class User(Resource):
     
     def get(self):
         # abort_on_user_does_not_exist(user_id)
-        args = user_get_args.parse_args()
-        email = args['email']
+        email = request.args.get('email')
         response = db_mgr.get_user(email=email)
         
         json_response = {db_mgr.COLUMNS[0]: response[db_mgr.COLUMNS[0]],
@@ -126,12 +125,9 @@ class Word(Resource):
         return {"words": list(response)}
     
     def get(self):
-        # args = user_get_words_args.parse_args()
-        # email = args['email']
-        
-        from flask import request
         email = request.args.get('email')
         words = db_mgr.get_words(email) 
+        
         return {"words": list(words)}
 
 # --- Adding language level arguments ---------------------------------------------------------------------------------------
@@ -165,9 +161,7 @@ class LanguageLevel(Resource):
         return response
 
     def get(self):
-        args = lang_lvl_get_args.parse_args()
-        
-        email = args['email']
+        email = request.args.get('email')
         
         response = db_mgr.get_language_level(email=email)
         
