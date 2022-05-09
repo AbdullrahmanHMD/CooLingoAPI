@@ -123,9 +123,9 @@ class DbManager():
             user = self.USERS_TABLE.get_item(Key=key)['Item']
             new_word_list = user['words']
             for word in words:
-                new_word_list[word] = 0
+                new_word_list.append(word)
             
-            user['words'] = new_word_list
+            user['words'] = set(new_word_list)
             response = self.USERS_TABLE.put_item(Item=user)
             
             
@@ -136,7 +136,7 @@ class DbManager():
                          user_id, self.USERS_TABLE_NAME,
                          error_code, error_msg)
 
-            response = None
+            response = error_code
             raise        
         
         return response
@@ -164,7 +164,7 @@ class DbManager():
                          user_id, self.USERS_TABLE_NAME,
                          error_code, error_msg)
 
-            response = None
+            response = error_code
             raise        
         
         return response
