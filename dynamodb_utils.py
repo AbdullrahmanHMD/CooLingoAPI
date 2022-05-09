@@ -157,7 +157,7 @@ class DbManager():
             response = error_code
             raise        
         
-        return response
+        return user['words'], response
     
     
     def delete_words(self, email, words : list):
@@ -185,7 +185,7 @@ class DbManager():
             response = error_code
             raise        
         
-        return response
+        return user['words'], response
         
     def get_words(self, email):
         user_id = sha1(email.encode('utf-8')).hexdigest()

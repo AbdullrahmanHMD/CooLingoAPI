@@ -115,21 +115,22 @@ class Word(Resource):
         args = user_add_words_args.parse_args()
         email = args['email']
         words = args['words']
-
-        return db_mgr.add_words(email=email, words=words)
+        response, _ = db_mgr.add_words(email=email, words=words)
+        return {"words": list(response)}
     
     def delete(self):
         args = user_delete_words_args.parse_args()
         email = args['email']
         words = args['words']
-        
-        return db_mgr.delete_words(email=email, words=words)
+        response, _ = db_mgr.delete_words(email=email, words=words)
+        return {"words": list(response)}
     
     def get(self):
         args = user_get_words_args.parse_args()
         email = args['email']
         words = db_mgr.get_words(email) 
-        return json.dumps(list(words))
+        
+        return {"words": list(words)}
 
 # --- Adding language level arguments ---------------------------------------------------------------------------------------
 
