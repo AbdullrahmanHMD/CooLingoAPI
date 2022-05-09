@@ -82,7 +82,7 @@
     },
     {
       "question" : "________ those newspapers have you read?",
-      "answers": ["in", "through", "during", "for"],
+      "answers": ["What are", "Which", "What of", "Which of"],
       "correct": 3
     },
     {

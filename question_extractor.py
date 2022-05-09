@@ -15,9 +15,11 @@ def load_json_file(file_path):
     return json_array
 
 def select_random_questions(questions, k):
-    selected_questions = random.choices(questions['questions'], k=k)
+    selected_questions = random.sample(questions['questions'], k=k)
     
     return selected_questions
 
 JSON_QUESTIONS_FILE = load_json_file(questions_path)
 QUESTIONS_JSON_ARRAY = {"questions" : select_random_questions(JSON_QUESTIONS_FILE, QUESTION_NUM)}
+
+print(QUESTIONS_JSON_ARRAY)
