@@ -200,7 +200,7 @@ class Authentication(Resource):
 api.add_resource(Authentication, "/auth")    
 api.add_resource(User, "/users")
 api.add_resource(Word, "/words")
-api.add_resource(Word, "/lang_lvl")
+api.add_resource(LanguageLevel, "/lang_lvl")
     
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8080, debug=True)

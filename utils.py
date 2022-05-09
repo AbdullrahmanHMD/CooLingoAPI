@@ -25,9 +25,4 @@ def serialize_list(list_):
     
     return response
 
-set_ = set()
-
-set_.add('x')
-
-print(set_)
 
