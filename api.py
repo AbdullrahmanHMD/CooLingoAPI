@@ -19,6 +19,8 @@ user_add_args.add_argument("first_name", type=str, help="The first name of the u
 user_add_args.add_argument("last_name", type=str, help="The last name of the user", required=True)
 user_add_args.add_argument("email", type=str, help="The email of the user", required=True)
 user_add_args.add_argument("password", type=str, help="The password of the user", required=True)
+user_add_args.add_argument("words", type=str, help="The list of words the user want to learn", required=True)
+# user_add_args.add_argument("password", type=str, help="The password of the user", required=True)
 
 user_delete_args = reqparse.RequestParser()
 user_delete_args.add_argument("email", type=str, help="The email of the user", required=True)
@@ -28,7 +30,7 @@ user_get_args.add_argument("email", type=str, help="The email of the user", requ
 
 user_add_words_args = reqparse.RequestParser()
 user_add_words_args.add_argument("email", type=str, help="The email of the user", required=True)
-user_add_words_args.add_argument("words", type=list, help="The new words to add", required=True)
+user_add_words_args.add_argument("words", type=list, help="The list of words the user want to learn", required=True)
 # ------------------------------------------------------------------------------------------------------
 
 db_mgr = DbManager()
@@ -70,7 +72,7 @@ class User(Resource):
         
         response = db_mgr.add_user(age=args['age'],
                                     first_name=args['first_name'], last_name=args['last_name'],
-                                    email=args['email'], password=args['password'])
+                                    email=args['email'], password=args['password'], words=args['words'])
 
         return response
     
