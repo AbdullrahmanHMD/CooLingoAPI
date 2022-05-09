@@ -126,10 +126,12 @@ class Word(Resource):
         return {"words": list(response)}
     
     def get(self):
-        args = user_get_words_args.parse_args()
-        email = args['email']
-        words = db_mgr.get_words(email) 
+        # args = user_get_words_args.parse_args()
+        # email = args['email']
         
+        from flask import request
+        email = request.args.get('email')
+        words = db_mgr.get_words(email) 
         return {"words": list(words)}
 
 # --- Adding language level arguments ---------------------------------------------------------------------------------------
