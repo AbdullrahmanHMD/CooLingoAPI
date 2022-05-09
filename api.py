@@ -25,6 +25,10 @@ user_delete_args.add_argument("email", type=str, help="The email of the user", r
 
 user_get_args = reqparse.RequestParser()
 user_get_args.add_argument("email", type=str, help="The email of the user", required=True)
+
+user_add_words_args = reqparse.RequestParser()
+user_add_words_args.add_argument("email", type=str, help="The email of the user", required=True)
+user_add_words_args.add_argument("words", type=list, help="The new words to add", required=True)
 # ------------------------------------------------------------------------------------------------------
 
 db_mgr = DbManager()
@@ -77,6 +81,13 @@ class User(Resource):
         email = args['email']
         
         return db_mgr.delete_user(email=email)
+    
+    def patch(self):
+        args = user_delete_args.parse_args()
+        email = args['email']
+        words = args['words']
+        
+        return db_mgr.add_words(email=email, words=words)
 
 api.add_resource(User, "/users")
     
