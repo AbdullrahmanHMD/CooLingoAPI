@@ -48,17 +48,17 @@ class User(Resource):
     def get(self):
         # abort_on_user_does_not_exist(user_id)
         email = request.args.get('email')
-        response = db_mgr.get_user(email=email)
+        response, status = db_mgr.get_user(email=email)
         
-        json_response = {db_mgr.COLUMNS[0]: response[db_mgr.COLUMNS[0]],
+        json_response = {"user":{db_mgr.COLUMNS[0]: response[db_mgr.COLUMNS[0]],
                         db_mgr.COLUMNS[1]: str(response[db_mgr.COLUMNS[1]]),
                         db_mgr.COLUMNS[2]: response[db_mgr.COLUMNS[2]],
                         db_mgr.COLUMNS[3]: response[db_mgr.COLUMNS[3]],
                         db_mgr.COLUMNS[4]: response[db_mgr.COLUMNS[4]],
                         db_mgr.COLUMNS[5]: response[db_mgr.COLUMNS[5]]
-                         }
+                         }, "status": status}
         
-        return json_response
+        return json_response 
 
     
     def post(self):

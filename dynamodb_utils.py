@@ -96,10 +96,10 @@ class DbManager():
         
         user_id = sha1(email.encode('utf-8')).hexdigest()
         key = {self.COLUMNS[0] : user_id}
-        
+        status = None
         try:
             response = self.USERS_TABLE.get_item(Key=key)['Item']
-            
+            status = 'success'
         except ClientError as err:
             error_msg = err.response['Error']['Message']
             error_code = err.response['Error']['Code']
@@ -108,8 +108,9 @@ class DbManager():
                          error_code, error_msg)
 
             response = None
+            status = 'fail'
             raise        
-        return response
+        return response, status
     
     def delete_user(self, email : str):
         
