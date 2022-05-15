@@ -327,7 +327,7 @@ api.add_resource(Questions, "/questions")
 api.add_resource(TotalTimeSpent, "/total_time")
 api.add_resource(AverageTimeSpent, "/avg_time")
 api.add_resource(LanguageErrors, "/lang_errors")
-api.add_resource(AverageLanguageErrors, "/avg_lang_errors")
+api.add_resource(AverageLanguageErrors(db_mgr), "/avg_lang_errors")
 api.add_resource(LoginNumber, "/login_num")
 
 if __name__ == "__main__":
