@@ -215,7 +215,7 @@ class TotalTimeSpent(Resource):
     def post(self):
         args = total_time_spent_args.parse_args()
         email = args['email']
-        session_time = args['total_time']
+        session_time = args['session_time']
         
         response, status = db_mgr.add_total_time(email, session_time)
         
