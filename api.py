@@ -318,6 +318,8 @@ class LoginNumber(Resource):
 
 from resources.avg_lang_errors import AverageLanguageErrors
 
+avg = AverageLanguageErrors(db_mgr=db_mgr)
+
 api.add_resource(Authentication, "/auth")    
 api.add_resource(User, "/users")
 api.add_resource(Word, "/words")
@@ -327,7 +329,7 @@ api.add_resource(Questions, "/questions")
 api.add_resource(TotalTimeSpent, "/total_time")
 api.add_resource(AverageTimeSpent, "/avg_time")
 api.add_resource(LanguageErrors, "/lang_errors")
-api.add_resource(AverageLanguageErrors(db_mgr), "/avg_lang_errors")
+api.add_resource(avg, "/avg_lang_errors")
 api.add_resource(LoginNumber, "/login_num")
 
 if __name__ == "__main__":
