@@ -26,3 +26,7 @@ def serialize_list(list_):
     return response
 
 
+def jsonify(response, status):
+    json_response = {"response" : response, "status": status}
+    return json_response
+

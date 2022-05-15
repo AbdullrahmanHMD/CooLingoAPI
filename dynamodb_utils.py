@@ -1,3 +1,4 @@
+from unittest.util import strclass
 import boto3
 import pandas as pd
 import logger
@@ -25,7 +26,8 @@ class DbManager():
         # Defining the available columns in the database.
         self.COLUMNS = ['user_id', 'age', 'email',
                 'first_name', 'last_name', 'password', 'words',
-                'language_level', 'lng_error_num', 'avg_lng_error_num', 'num_of_logins']
+                'language_level', 'lng_error_num', 'avg_lng_error_num',
+                'total_time_spent', 'avg_time_spent', 'num_of_logins']
 
 
     def add_user_dict(self, new_user):
@@ -57,7 +59,7 @@ class DbManager():
         DEFAULT_LANGUAGE_LEVEL = "N/A"
         DEFAULT_LANGUAGE_ERROR_NUM = DEFAULT_AVG_LNG_ERROR_NUM = 0
         DEFUALT_NUM_OF_LOGINS = 1
-        
+        DEFUALT_AVG_TIME_SPENT = DEFUALT_TOTAL_TIME_SPENT = 0
         
         new_user = {
             self.COLUMNS[0] : user_id,
@@ -70,8 +72,11 @@ class DbManager():
             self.COLUMNS[7] : DEFAULT_LANGUAGE_LEVEL,
             self.COLUMNS[8] : DEFAULT_LANGUAGE_ERROR_NUM,
             self.COLUMNS[9] : DEFAULT_AVG_LNG_ERROR_NUM,
-            self.COLUMNS[10] : DEFUALT_NUM_OF_LOGINS
+            self.COLUMNS[10] : DEFUALT_TOTAL_TIME_SPENT,
+            self.COLUMNS[11] : DEFUALT_AVG_TIME_SPENT,
+            self.COLUMNS[12] : DEFUALT_NUM_OF_LOGINS
             }
+        
         try:
             response_ = self.USERS_TABLE.put_item(Item=new_user)
             response_ = {
@@ -131,6 +136,7 @@ class DbManager():
         
         return response
     
+    # --- Word List --------------------------------------------------------------------------
     
     def add_words(self, email, words : list):
         
@@ -159,8 +165,8 @@ class DbManager():
             raise        
         
         return user['words'], response
-    
-    
+        
+        
     def delete_words(self, email, words : list):
         
         user_id = sha1(email.encode('utf-8')).hexdigest()
@@ -202,11 +208,11 @@ class DbManager():
         
         return words_list
         
+    # --- Login Authentication ----------------------------------------------------
     
     def authenticate(self, email : str, password : str):
-        user = self.get_user(email)
+        user, status = self.get_user(email)
         
-        status = None
         response = None
         
         if password == user['password']:
@@ -218,28 +224,115 @@ class DbManager():
             
         return response, status        
         
+    # --- Language Level ---------------------------------------------------------
     
     def add_language_level(self, email : str, lang_lvl : str):
-        user = self.get_user(email)
+        user, status = self.get_user(email)
         
-        status = None
         response = None
         
         user['language_level'] = lang_lvl
         
         response = self.USERS_TABLE.put_item(Item=user)
         
-        return response
+        return response, status
     
     def get_language_level(self, email : str):
-        user = self.get_user(email)
+        user, status = self.get_user(email)
         lang_lvl = user['language_level'] 
         
-        return lang_lvl
+        return lang_lvl, status
+    
+    # --- Average time spent ----------------------------------------------------
+    
+    def add_avg_time(self, email : str, session_time : int):
+        user, status = self.get_user(email)
+
+        login_num = user['num_of_logins']
+        total_time_spent = user['total_time_spent']
         
+        user['avg_time_spent'] = (total_time_spent + session_time) // login_num
+        
+        response = self.USERS_TABLE.put_item(Item=user)
+        
+        return response, status
+    
+    
+    def get_avg_time(self, email : str):
+        user, status = self.get_user(email)
+
+        avg_time_spent = user['avg_time_spent']
+        
+        return avg_time_spent, status
+    
+    # --- Total time spent ----------------------------------------------------
+    
+    def add_total_time(self, email : str, session_time : float):
+        user, status = self.get_user(email)
+
+        total_time = user['total_time_spent']
+        
+        user['total_time_spent'] = total_time + session_time
+        
+        response = self.USERS_TABLE.put_item(Item=user)
+        
+        return response, status
+    
+    
+    def get_total_time(self, email : str):
+        user, status = self.get_user(email)
+
+        total_time_spent = user['total_time_spent']
+        
+        return total_time_spent, status
+    
+    # --- Average Language Errors ----------------------------------------------------
+    
+    def add_avg_lang_error(self, email : str, lang_errors : int):
+        user, status = self.get_user(email)
+
+        login_num = user['num_of_logins']
+        avg_lng_error_num = user['avg_lng_error_num']
+        
+        user['avg_lng_error_num'] = (avg_lng_error_num + lang_errors) / login_num
+        
+        response = self.USERS_TABLE.put_item(Item=user)
+        
+        return response, status
+    
+    
+    def get_avg_lang_error(self, email : str):
+        user, status = self.get_user(email)
+
+        avg_lng_error_num = user['avg_lng_error_num']
+        
+        return avg_lng_error_num, status
+    
+    # --- Total Language Errors ----------------------------------------------------
+    
+    def add_lang_errors(self, email : str, lang_errors : int):
+        user, status = self.get_user(email)
+
+        total_lang_errors = user['lng_error_num']
+        user['lng_error_num'] = lang_errors + total_lang_errors
+        
+        response = self.USERS_TABLE.put_item(Item=user)
+        
+        return response, status
+    
+    
+    def get_lang_errors(self, email : str):
+        user, status = self.get_user(email)
+
+        lng_error_num = user['lng_error_num']
+        
+        return lng_error_num, status
+    
+    # ---------------------------------------------------------------------------
     
     def get_key(self, email : str):
         user_id = sha1(email.encode('utf-8')).hexdigest()
         key = {self.COLUMNS[0] : user_id}
         
         return key
+    

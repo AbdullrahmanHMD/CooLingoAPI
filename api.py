@@ -200,11 +200,134 @@ class Questions(Resource):
         return QUESTIONS_JSON_ARRAY
 
 
+
+# --- User total time spent arguments ---------------------------------------------------------------------------------------
+    
+total_time_spent_args = reqparse.RequestParser()
+total_time_spent_args.add_argument("email", type=str, help="The email of the user.", required=True)
+total_time_spent_args.add_argument("session_time", type=int, help="The last session time spent on the app by the user.", required=True)
+
+# ------------------------------------------------------------------------------------------------------------------
+
+class TotalTimeSpent(Resource):
+    
+    def post(self):
+        args = total_time_spent_args.parse_args()
+        email = args['email']
+        session_time = args['total_time']
+        
+        response, status = db_mgr.add_total_time(email, session_time)
+        
+        json_response = jsonify(response=response, status=status)
+        
+        return json_response
+    
+    def get(self):
+        email = request.args.get('email')
+        
+        response, status = db_mgr.get_total_time(email)
+        
+        json_response = jsonify(response=response, status=status)
+        
+        return json_response
+
+# --- User average time spent arguments ---------------------------------------------------------------------------------------
+    
+avg_time_spent_args = reqparse.RequestParser()
+avg_time_spent_args.add_argument("email", type=str, help="The email of the user.", required=True)
+avg_time_spent_args.add_argument("session_time", type=int, help="The last session time spent on the app by the user.", required=True)
+
+# ------------------------------------------------------------------------------------------------------------------
+
+class AverageTimeSpent(Resource):
+    def post(self):
+        args = avg_time_spent_args.parse_args()
+        email = args['email']
+        session_time = args['session_time']
+        
+        response, status = db_mgr.add_avg_time(email, session_time)
+        
+        json_response = jsonify(response=response, status=status)
+        
+        return json_response
+    
+    def get(self):
+        email = request.args.get('email')
+        
+        response, status = db_mgr.get_avg_time(email)
+        
+        json_response = jsonify(response=response, status=status)
+        
+        return json_response
+
+# --- User language errors arguments ---------------------------------------------------------------------------------------
+    
+total_lang_errors_args = reqparse.RequestParser()
+total_lang_errors_args.add_argument("email", type=str, help="The email of the user.", required=True)
+total_lang_errors_args.add_argument("session_errors", type=int, help="The last session time spent on the app by the user.", required=True)
+
+# ------------------------------------------------------------------------------------------------------------------
+
+class LanguageErrors(Resource):
+    def post(self):
+        args = total_lang_errors_args.parse_args()
+        email = args['email']
+        session_errors = args['session_errors']
+        
+        response, status = db_mgr.add_lang_errors(email, session_errors)
+        
+        json_response = jsonify(response=response, status=status)
+        
+        return json_response
+    
+    def get(self):
+        email = request.args.get('email')
+        
+        response, status = db_mgr.get_lang_errors(email)
+        
+        json_response = jsonify(response=response, status=status)
+        
+        return json_response
+    
+# --- User average language errors arguments ---------------------------------------------------------------------------------------
+    
+avg_lang_errors_args = reqparse.RequestParser()
+avg_lang_errors_args.add_argument("email", type=str, help="The email of the user.", required=True)
+avg_lang_errors_args.add_argument("session_errors", type=int, help="The last session time spent on the app by the user.", required=True)
+
+# ------------------------------------------------------------------------------------------------------------------
+
+class AverageLanguageErrors(Resource):
+    def post(self):
+        args = avg_lang_errors_args.parse_args()
+        email = args['email']
+        session_errors = args['session_errors']
+        
+        response, status = db_mgr.add_avg_lang_error(email, session_errors)
+        
+        json_response = jsonify(response=response, status=status)
+        
+        return json_response
+        
+    def get(self):
+        email = request.args.get('email')
+        
+        response, status = db_mgr.get_avg_lang_error(email)
+        
+        json_response = jsonify(response=response, status=status)
+        
+        return json_response
+
+
 api.add_resource(Authentication, "/auth")    
 api.add_resource(User, "/users")
 api.add_resource(Word, "/words")
 api.add_resource(LanguageLevel, "/lang_lvl")
 api.add_resource(Questions, "/questions")
+api.add_resource(TotalTimeSpent, "/total_time")
+api.add_resource(AverageTimeSpent, "/avg_time")
+api.add_resource(LanguageErrors, "/lang_errors")
+api.add_resource(AverageLanguageErrors, "/avg_lang_errors")
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8080, debug=True)
