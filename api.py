@@ -1,3 +1,4 @@
+from urllib import response
 from flask import Flask, request
 from flask_restful import Api, Resource, reqparse, abort
 from dynamodb_utils import *
@@ -318,16 +319,42 @@ class AverageLanguageErrors(Resource):
         
         return json_response
 
+# --- User login number arguments ---------------------------------------------------------------------------------------
+    
+# login_num_args = reqparse.RequestParser()
+# login_num_args.add_argument("email", type=str, help="The email of the user.", required=True)
+
+# ------------------------------------------------------------------------------------------------------------------
+
+class LoginNumber(Resource):
+    def post(self):
+        email = request.args.get('email')
+        response, status = db_mgr.add_login_num(email)
+        
+        json_response = jsonify(response=response, status=status)
+        
+        return json_response
+    
+    def get(self):
+        email = request.args.get('email')
+        response, status = db_mgr.get_login_num(email)
+        
+        json_response = jsonify(response=response, status=status)
+        
+        return json_response
+
 
 api.add_resource(Authentication, "/auth")    
 api.add_resource(User, "/users")
 api.add_resource(Word, "/words")
 api.add_resource(LanguageLevel, "/lang_lvl")
 api.add_resource(Questions, "/questions")
+
 api.add_resource(TotalTimeSpent, "/total_time")
 api.add_resource(AverageTimeSpent, "/avg_time")
 api.add_resource(LanguageErrors, "/lang_errors")
 api.add_resource(AverageLanguageErrors, "/avg_lang_errors")
+api.add_resource(LoginNumber, "/login_num")
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8080, debug=True)

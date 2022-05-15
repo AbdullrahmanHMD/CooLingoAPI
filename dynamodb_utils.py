@@ -328,6 +328,25 @@ class DbManager():
         
         return lng_error_num, status
     
+    # --- Number of logins ------------------------------------------------------
+    
+    def add_login_num(self, email : str):
+        user, status = self.get_user(email)
+        
+        login_num = user['num_of_logins'] + 1
+        user['num_of_logins'] = login_num
+        
+        response = self.USERS_TABLE.put_item(Item=user)
+        
+        return response, status
+        
+    def get_login_num(self, email : str):
+        user, status = self.get_user(email)
+        
+        login_num = user['num_of_logins']
+        
+        return login_num, status
+    
     # ---------------------------------------------------------------------------
     
     def get_key(self, email : str):
