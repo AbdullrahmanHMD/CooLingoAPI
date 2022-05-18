@@ -150,7 +150,7 @@ class DbManager():
             for word in words:
                 new_word_list[word] = 1  
                 
-            user['words'] = json.loads(json.dumps(new_word_list), parse_float=Decimal)
+            user['words'] = json.dumps(new_word_list)
             response = self.USERS_TABLE.put_item(Item=user)
             
         except ClientError as err:
@@ -197,7 +197,7 @@ class DbManager():
         
     def get_words(self, email):
         user, status = self.get_user(email=email)
-        words_list = user['words']
+        words_list = json.loads(user['words'])
         
         return words_list, status
         
@@ -207,9 +207,9 @@ class DbManager():
         try:
             word_dict = user['words']
             if word in word_dict.keys():
-                old_value = int(word_dict[word]["N"])
-                word_dict[word] = json.loads(json.dumps(old_value + 1), parse_float=Decimal)
-            
+                old_value = word_dict[word]
+                word_dict[word] = old_value + 1
+                response = self.USERS_TABLE.put_item(Item=user)
             else:
                 status = 'fail'
         except:
