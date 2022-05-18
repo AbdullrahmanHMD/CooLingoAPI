@@ -1,10 +1,9 @@
-from unittest.util import strclass
 import boto3
 import pandas as pd
 import logger
 from botocore.exceptions import ClientError
-from hashlib import sha1, shake_128
-
+from hashlib import sha1
+import json
 class DbManager():
 
     def __init__(self):
@@ -149,7 +148,7 @@ class DbManager():
             for word in words:
                 new_word_list[word] = {"level" : 1}    
                 
-            user['words'] = new_word_list
+            user['words'] = json.dumps(new_word_list)
             response = self.USERS_TABLE.put_item(Item=user)
             
             
