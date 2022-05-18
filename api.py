@@ -122,14 +122,20 @@ class Word(Resource):
         email = args['email']
         words = args['words']
         
-        response, _ = db_mgr.add_words(email=email, words=words)
-        return {"words": list(response)}
+        response, status = db_mgr.add_words(email=email, words=words)
+        
+        json_response = jsonify(response=response, status=status)
+        return json_response
     
     def delete(self):
         args = user_delete_words_args.parse_args()
         email = args['email']
         words = args['words']
-        response, _ = db_mgr.delete_words(email=email, words=words)
+        response, status = db_mgr.delete_words(email=email, words=words)
+        
+        json_response = jsonify(response=response, status=status)
+        return json_response
+        
         return {"words": list(response)}
     
     def patch(self):
@@ -139,7 +145,6 @@ class Word(Resource):
         
         response, status = db_mgr.update_word(email=email, word=word)
         
-        print(response)
         json_response = jsonify(response=response, status=status)
         
         return json_response

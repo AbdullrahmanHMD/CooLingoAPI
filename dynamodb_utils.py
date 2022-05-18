@@ -174,7 +174,7 @@ class DbManager():
                 if word in new_word_list.keys():
                     del new_word_list[word]
             
-            user['words'] = new_word_list
+            user['words'] = json.dumps(new_word_list)
             response = self.USERS_TABLE.put_item(Item=user)
             
             
@@ -185,7 +185,7 @@ class DbManager():
             response = error_code
             raise        
         
-        return user['words'], status
+        return json.loads(user['words']), status
         
     def get_words(self, email):
         user, status = self.get_user(email=email)
