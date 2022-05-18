@@ -205,7 +205,20 @@ class DbManager():
         return words_list
         
     def update_word(self, email, word):
-        pass
+        user, status = self.get_user(email=email)
+        
+        try:
+            word_dict = user['words']
+            if word in word_dict.keys():
+                word_dict[word] = word_dict[word] + 1
+            
+            else:
+                status = 'fail'
+        except:
+            status = 'fail'
+            
+        return status
+    
     # --- Login Authentication ----------------------------------------------------
     
     def authenticate(self, email : str, password : str):
