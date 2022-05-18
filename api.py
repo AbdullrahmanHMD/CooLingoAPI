@@ -51,7 +51,7 @@ class User(Resource):
         email = request.args.get('email')
         response, status = db_mgr.get_user(email=email)
         
-        json_response = {"user":{db_mgr.COLUMNS[0]: response[db_mgr.COLUMNS[0]],
+        json_response = {"response":{db_mgr.COLUMNS[0]: response[db_mgr.COLUMNS[0]],
                         db_mgr.COLUMNS[1]: str(response[db_mgr.COLUMNS[1]]),
                         db_mgr.COLUMNS[2]: response[db_mgr.COLUMNS[2]],
                         db_mgr.COLUMNS[3]: response[db_mgr.COLUMNS[3]],
@@ -73,7 +73,7 @@ class User(Resource):
                                    last_name=args['last_name'], email=args['email'],
                                    password=args['password'])
 
-        json_response = {"user": {
+        json_response = {"response": {
                 db_mgr.COLUMNS[1]: str(response[db_mgr.COLUMNS[1]]),
                 db_mgr.COLUMNS[2]: response[db_mgr.COLUMNS[2]],
                 db_mgr.COLUMNS[3]: response[db_mgr.COLUMNS[3]],
@@ -89,7 +89,11 @@ class User(Resource):
         args = user_delete_args.parse_args()
         email = args['email']
         
-        return db_mgr.delete_user(email=email)
+        response, status = db_mgr.delete_user(email=email)        
+        
+        json_response = jsonify(response=response, status=status)
+        
+        return json_response
     
 # --- Adding a word arguments ---------------------------------------------------------------------------------------
 
@@ -134,9 +138,9 @@ class Word(Resource):
         response, status = db_mgr.delete_words(email=email, words=words)
         
         json_response = jsonify(response=response, status=status)
+        
         return json_response
         
-        return {"words": list(response)}
     
     def patch(self):
         args = update_words_args.parse_args()
@@ -151,9 +155,11 @@ class Word(Resource):
     
     def get(self):
         email = request.args.get('email')
-        words = db_mgr.get_words(email) 
+        response, status = db_mgr.get_words(email) 
         
-        return {"words": list(words)}
+        json_response = jsonify(response=response, status=status)
+        
+        return json_response
 
 # --- Adding language level arguments ---------------------------------------------------------------------------------------
 
@@ -181,16 +187,20 @@ class LanguageLevel(Resource):
         email = args['email']
         lang_lvl = args['lang_lvl']
         
-        response = db_mgr.add_language_level(email=email, lang_lvl=lang_lvl)
+        response, status = db_mgr.add_language_level(email=email, lang_lvl=lang_lvl)
         
-        return response
+        json_response = jsonify(response=response, status=status)
+        
+        return json_response
 
     def get(self):
         email = request.args.get('email')
         
-        response = db_mgr.get_language_level(email=email)
+        response, status = db_mgr.get_language_level(email=email)
         
-        return response
+        json_response = jsonify(response=response, status=status)
+        
+        return json_response
     
     def patch(self):
         args = lang_lvl_update_args.parse_args()
@@ -198,9 +208,11 @@ class LanguageLevel(Resource):
         email = args['email']
         lang_lvl = args['lang_lvl']
         
-        response = db_mgr.add_language_level(email=email, lang_lvl=lang_lvl)
+        response, status = db_mgr.add_language_level(email=email, lang_lvl=lang_lvl)
         
-        return response
+        json_response = jsonify(response=response, status=status)
+        
+        return json_response
 
 # --- User authentication arguments ---------------------------------------------------------------------------------------
     

@@ -130,13 +130,11 @@ class DbManager():
         except ClientError as err:
             error_msg = err.response['Error']['Message']
             error_code = err.response['Error']['Code']
-            logger.error('Could not delete with ID: %s from table %s. %s: %s',
-                         user_id, self.USERS_TABLE_NAME,
-                         error_code, error_msg)
+            status = 'fail'
             response = None
             raise        
         
-        return response
+        return response, status
     
     # --- Word List --------------------------------------------------------------------------
     
