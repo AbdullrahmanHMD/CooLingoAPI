@@ -96,6 +96,13 @@ class User(Resource):
 user_add_words_args = reqparse.RequestParser()
 user_add_words_args.add_argument("email", type=str, help="The email of the user", required=True)
 user_add_words_args.add_argument("words", type=str, help="The list of words the user want to learn", required=True, action='append')
+user_add_words_args.add_argument("word_level", type=int, help="The number of times a user clicked a word", required=True)
+
+# --- Adding a word arguments ---------------------------------------------------------------------------------------
+
+update_words_args = reqparse.RequestParser()
+update_words_args.add_argument("email", type=str, help="The email of the user", required=True)
+update_words_args.add_argument("word", type=str, help="The word whose value will be updated", required=True)
 
 # --- Deleting a word arguments -------------------------------------------------------------------------------------
 
@@ -115,6 +122,8 @@ class Word(Resource):
         args = user_add_words_args.parse_args()
         email = args['email']
         words = args['words']
+        word_level = args['word_level']
+        
         response, _ = db_mgr.add_words(email=email, words=words)
         return {"words": list(response)}
     
@@ -124,6 +133,17 @@ class Word(Resource):
         words = args['words']
         response, _ = db_mgr.delete_words(email=email, words=words)
         return {"words": list(response)}
+    
+    def patch(self):
+        args = update_words_args.parse_args()
+        email = args['email']
+        word = args['word']
+        
+        response, status = db_mgr.update_word(email=email, word=word)
+        
+        json_response = jsonify(response=response, status=status)
+        
+        return json_response
     
     def get(self):
         email = request.args.get('email')

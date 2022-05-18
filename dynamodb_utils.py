@@ -55,7 +55,8 @@ class DbManager():
         
         status = 'None'
         
-        DEFAULT_WORDS_LIST = []
+        # DEFAULT_WORDS_LIST = []
+        DEFAULT_WORDS_LIST = {}
         DEFAULT_LANGUAGE_LEVEL = "N/A"
         DEFAULT_LANGUAGE_ERROR_NUM = DEFAULT_AVG_LNG_ERROR_NUM = 0
         DEFUALT_NUM_OF_LOGINS = 1
@@ -140,31 +141,26 @@ class DbManager():
     
     def add_words(self, email, words : list):
         
-        user_id = sha1(email.encode('utf-8')).hexdigest()
-        key = {self.COLUMNS[0] : user_id}
+        user, status = self.get_user(email=email)
         
         try:
-            user = self.USERS_TABLE.get_item(Key=key)['Item']
-            new_word_list = list(user['words'])
+            new_word_list = user['words']
+
             for word in words:
-                if not (word in new_word_list):
-                    new_word_list.append(word)
-            
-            user['words'] = set(new_word_list)
+                new_word_list[word] = 1    
+                
+            user['words'] = new_word_list
             response = self.USERS_TABLE.put_item(Item=user)
             
             
         except ClientError as err:
             error_msg = err.response['Error']['Message']
             error_code = err.response['Error']['Code']
-            logger.error('Could not get user with ID: %s from table %s. %s: %s',
-                         user_id, self.USERS_TABLE_NAME,
-                         error_code, error_msg)
-
-            response = error_code
+            
+            status = 'fail'
             raise        
         
-        return user['words'], response
+        return user['words'], status
         
         
     def delete_words(self, email, words : list):
@@ -208,6 +204,8 @@ class DbManager():
         
         return words_list
         
+    def update_word(self, email, word):
+        pass
     # --- Login Authentication ----------------------------------------------------
     
     def authenticate(self, email : str, password : str):
