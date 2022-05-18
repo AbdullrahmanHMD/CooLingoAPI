@@ -197,10 +197,11 @@ class DbManager():
         user, status = self.get_user(email=email)
         
         try:
-            word_dict = user['words']
+            word_dict = json.loads(user['words'])
             if word in word_dict.keys():
                 old_value = word_dict[word]
                 word_dict[word] = old_value + 1
+                user['words'] = json.dumps(word_dict)
                 response = self.USERS_TABLE.put_item(Item=user)
             else:
                 status = 'fail'
