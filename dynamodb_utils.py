@@ -147,7 +147,7 @@ class DbManager():
             new_word_list = user['words']
 
             for word in words:
-                new_word_list[word] = 1    
+                new_word_list[word] = {"level" : 1}    
                 
             user['words'] = new_word_list
             response = self.USERS_TABLE.put_item(Item=user)
@@ -210,8 +210,8 @@ class DbManager():
         try:
             word_dict = user['words']
             if word in word_dict.keys():
-                old_value = int(word_dict[word]['N'])
-                word_dict[word] = {"N" : str(old_value + 1)}
+                old_value = int(word_dict[word]["level"])
+                word_dict[word] = {"level" : str(old_value + 1)}
             
             else:
                 status = 'fail'

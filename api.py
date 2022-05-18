@@ -139,6 +139,7 @@ class Word(Resource):
         
         response, status = db_mgr.update_word(email=email, word=word)
         
+        print(response)
         json_response = jsonify(response=response, status=status)
         
         return json_response
