@@ -160,24 +160,19 @@ class DbManager():
             status = 'fail'
             raise        
         
-        return user['words'], status
+        return json.loads(user['words']), status
         
         
     def delete_words(self, email, words : list):
         
-        user_id = sha1(email.encode('utf-8')).hexdigest()
-        key = {self.COLUMNS[0] : user_id}
+        user, status = self.get_user(email=email)
         
         try:
-            user = self.USERS_TABLE.get_item(Key=key)['Item']
-            new_word_list = user['words']
-            
-            if len(user['words']) <= len(words):
-                new_word_list = {}  
-                
-            else:
-                for word in words:
-                    new_word_list.remove(word)
+            new_word_list = json.loads(user['words'])
+
+            for word in words:
+                if word in new_word_list.keys():
+                    del new_word_list[word]
             
             user['words'] = new_word_list
             response = self.USERS_TABLE.put_item(Item=user)
@@ -186,14 +181,11 @@ class DbManager():
         except ClientError as err:
             error_msg = err.response['Error']['Message']
             error_code = err.response['Error']['Code']
-            logger.error('Could not get user with ID: %s from table %s. %s: %s',
-                         user_id, self.USERS_TABLE_NAME,
-                         error_code, error_msg)
-
+            status = 'fail'
             response = error_code
             raise        
         
-        return user['words'], response
+        return user['words'], status
         
     def get_words(self, email):
         user, status = self.get_user(email=email)
