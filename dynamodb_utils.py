@@ -218,7 +218,7 @@ class DbManager():
         except:
             status = 'fail'
             
-        return status
+        return word_dict, status
     
     # --- Login Authentication ----------------------------------------------------
     
