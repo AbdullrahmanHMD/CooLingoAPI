@@ -173,7 +173,7 @@ class DbManager():
             new_word_list = user['words']
             
             if len(user['words']) <= len(words):
-                new_word_list = []    
+                new_word_list = {}  
                 
             else:
                 for word in words:
