@@ -4,6 +4,8 @@ import logger
 from botocore.exceptions import ClientError
 from hashlib import sha1
 import json
+from decimal import Decimal
+
 class DbManager():
 
     def __init__(self):
@@ -146,11 +148,10 @@ class DbManager():
             new_word_list = user['words']
 
             for word in words:
-                new_word_list[word] = {"level" : 1}    
+                new_word_list[word] = 1  
                 
-            user['words'] = json.dumps(new_word_list)
+            user['words'] = json.loads(json.dumps(new_word_list))
             response = self.USERS_TABLE.put_item(Item=user)
-            
             
         except ClientError as err:
             error_msg = err.response['Error']['Message']
