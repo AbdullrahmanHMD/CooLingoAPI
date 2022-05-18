@@ -208,7 +208,7 @@ class DbManager():
         except:
             status = 'fail'
             
-        return word_dict[word], status
+        return {word: word_dict[word]}, status
     
     # --- Login Authentication ----------------------------------------------------
     
