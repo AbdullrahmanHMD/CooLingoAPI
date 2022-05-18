@@ -210,7 +210,8 @@ class DbManager():
         try:
             word_dict = user['words']
             if word in word_dict.keys():
-                word_dict[word] = word_dict[word] + 1
+                old_value = int(word_dict[word]['N'])
+                word_dict[word] = {"N" : str(old_value + 1)}
             
             else:
                 status = 'fail'
