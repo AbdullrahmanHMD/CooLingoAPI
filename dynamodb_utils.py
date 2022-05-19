@@ -147,7 +147,9 @@ class DbManager():
 
             for word in words:
                 new_word_list[word] = 1  
-                
+            
+            print(type(json.dumps(new_word_list)))
+            
             user['words'] = json.dumps(new_word_list)
             response = self.USERS_TABLE.put_item(Item=user)
             
@@ -206,7 +208,7 @@ class DbManager():
         except:
             status = 'fail'
             
-        return {word: word_dict[word]}, status
+        return json.loads(word_dict), status
     
     # --- Login Authentication ----------------------------------------------------
     
