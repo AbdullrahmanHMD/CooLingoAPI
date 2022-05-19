@@ -208,7 +208,7 @@ class DbManager():
         except:
             status = 'fail'
             
-        return json.loads(word_dict), status
+        return word_dict, status
     
     # --- Login Authentication ----------------------------------------------------
     
