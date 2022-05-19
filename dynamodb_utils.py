@@ -70,7 +70,7 @@ class DbManager():
             self.COLUMNS[3] : first_name,
             self.COLUMNS[4] : last_name,
             self.COLUMNS[5] : password,
-            self.COLUMNS[6] : DEFAULT_WORDS_LIST,
+            self.COLUMNS[6] : json.dumps(DEFAULT_WORDS_LIST),
             self.COLUMNS[7] : DEFAULT_LANGUAGE_LEVEL,
             self.COLUMNS[8] : DEFAULT_LANGUAGE_ERROR_NUM,
             self.COLUMNS[9] : DEFAULT_AVG_LNG_ERROR_NUM,
@@ -143,7 +143,7 @@ class DbManager():
         user, status = self.get_user(email=email)
         
         try:
-            new_word_list = user['words']
+            new_word_list = json.loads(user['words'])
 
             for word in words:
                 new_word_list[word] = 1  
