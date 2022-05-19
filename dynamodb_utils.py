@@ -143,7 +143,7 @@ class DbManager():
         user, status = self.get_user(email=email)
         
         try:
-            new_word_list = json.loads(user['words'])
+            new_word_list = user['words']
 
             for word in words:
                 new_word_list[word] = 1  
