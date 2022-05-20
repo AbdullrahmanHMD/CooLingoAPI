@@ -1,4 +1,4 @@
-import boto3
+ boto3
 import pandas as pd
 import logger
 from botocore.exceptions import ClientError
@@ -6,8 +6,10 @@ from hashlib import sha1
 import json
 from decimal import Decimal
 
-class DbManager():
+MAX_STATISTICS_SPAN = 10
 
+class DbManager():
+    
     def __init__(self):
     
         data = pd.read_csv('db_manager.csv')
@@ -28,7 +30,8 @@ class DbManager():
         self.COLUMNS = ['user_id', 'age', 'email',
                 'first_name', 'last_name', 'password', 'words',
                 'language_level', 'lng_error_num', 'avg_lng_error_num',
-                'total_time_spent', 'avg_time_spent', 'num_of_logins']
+                'total_time_spent', 'avg_time_spent', 'num_of_logins',
+                'avg_time_stat', 'avg_error_stat']
 
 
     def add_user_dict(self, new_user):
@@ -56,12 +59,13 @@ class DbManager():
         
         status = 'None'
         
-        # DEFAULT_WORDS_LIST = []
+
         DEFAULT_WORDS_LIST = {}
         DEFAULT_LANGUAGE_LEVEL = "N/A"
         DEFAULT_LANGUAGE_ERROR_NUM = DEFAULT_AVG_LNG_ERROR_NUM = 0
         DEFUALT_NUM_OF_LOGINS = 1
         DEFUALT_AVG_TIME_SPENT = DEFUALT_TOTAL_TIME_SPENT = 0
+        DEFAULT_TIME_STATS, DEFAULT_ERROR_STATS = [], []
         
         new_user = {
             self.COLUMNS[0] : user_id,
@@ -76,7 +80,9 @@ class DbManager():
             self.COLUMNS[9] : DEFAULT_AVG_LNG_ERROR_NUM,
             self.COLUMNS[10] : DEFUALT_TOTAL_TIME_SPENT,
             self.COLUMNS[11] : DEFUALT_AVG_TIME_SPENT,
-            self.COLUMNS[12] : DEFUALT_NUM_OF_LOGINS
+            self.COLUMNS[12] : DEFUALT_NUM_OF_LOGINS,
+            self.COLUMNS[13] : json.dumps(DEFAULT_TIME_STATS),
+            self.COLUMNS[14] : json.dumps(DEFAULT_ERROR_STATS)
             }
         
         try:
@@ -253,9 +259,23 @@ class DbManager():
         login_num = user['num_of_logins']
         total_time_spent = user['total_time_spent']
         
-        user['avg_time_spent'] = (total_time_spent + session_time) // login_num
+        avg_time_spent = (total_time_spent + session_time) // login_num
+        
+        user['avg_time_spent'] = avg_time_spent
         
         response = self.USERS_TABLE.put_item(Item=user)
+        
+        # Adding the average error number to the statistics array:
+        stats_array = json.loads(user['avg_time_stat'])
+        
+        if len(stats_array) < MAX_STATISTICS_SPAN:
+            stats_array.append(avg_time_spent)
+        else:
+            del stats_array[0]    
+            stats_array.append(avg_time_spent)
+        
+        user['avg_time_stat'] = json.dumps(stats_array)
+        
         
         return response, status
     
@@ -296,7 +316,21 @@ class DbManager():
         login_num = user['num_of_logins']
         avg_lng_error_num = user['avg_lng_error_num']
         
-        user['avg_lng_error_num'] = (avg_lng_error_num + lang_errors) / login_num
+        avg_lng_error_num = (avg_lng_error_num + lang_errors) / login_num
+        user['avg_lng_error_num'] = avg_lng_error_num
+        
+        
+        # Adding the average error number to the statistics array:
+        
+        stats_array = json.loads(user['avg_error_stat'])
+        
+        if len(stats_array) < MAX_STATISTICS_SPAN:
+            stats_array.append(avg_lng_error_num)
+        else:
+            del stats_array[0]    
+            stats_array.append(avg_lng_error_num)
+        
+        user['avg_error_stat'] = json.dumps(stats_array)
         
         response = self.USERS_TABLE.put_item(Item=user)
         
@@ -349,7 +383,26 @@ class DbManager():
         
         return login_num, status
     
-    # ---------------------------------------------------------------------------
+    # --- Statistics ------------------------------------------------------------------------
+    
+    
+    def get_avg_time_stats(self, email):
+        user, status = self.get_user(email)
+        
+        avg_time_stats = json.loads(user['avg_time_stat'])
+        
+        return avg_time_stats, status
+        
+        
+    def get_avg_error_stats(self, email):
+        user, status = self.get_user(email)
+        
+        avg_error_stats = json.loads(user['avg_error_stat'])
+        
+        return avg_error_stats, status
+    
+    
+    # --- Helper functions ------------------------------------------------------------------------
     
     def get_key(self, email : str):
         user_id = sha1(email.encode('utf-8')).hexdigest()

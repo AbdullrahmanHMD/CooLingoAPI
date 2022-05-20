@@ -355,12 +355,7 @@ class AverageLanguageErrors(Resource):
         
         return json_response
 
-# --- User login number arguments ---------------------------------------------------------------------------------------
-    
-# login_num_args = reqparse.RequestParser()
-# login_num_args.add_argument("email", type=str, help="The email of the user.", required=True)
-
-# ------------------------------------------------------------------------------------------------------------------
+# --- User login number resource ---------------------------------------------------------------------------------------
 
 class LoginNumber(Resource):
     def post(self):
@@ -379,6 +374,28 @@ class LoginNumber(Resource):
         
         return json_response
 
+# --- User average time statistics resource ---------------------------------------------------------------------------------------
+
+class AvgTimeStatistics(Resource):
+    def get(self):
+        email = request.args.get('email')
+        response, status = db_mgr.get_avg_time_stats(email)
+        
+        json_response = jsonify(response=response, status=status)
+        
+        return json_response
+
+# --- User average language errors statistics resource ---------------------------------------------------------------------------------------
+
+class AvgErrorsStatistics(Resource):
+    def get(self):
+        email = request.args.get('email')
+        response, status = db_mgr.get_avg_error_stats(email)
+        
+        json_response = jsonify(response=response, status=status)
+        
+        return json_response
+
 
 api.add_resource(Authentication, "/auth")    
 api.add_resource(User, "/users")
@@ -391,6 +408,8 @@ api.add_resource(AverageTimeSpent, "/avg_time")
 api.add_resource(LanguageErrors, "/lang_errors")
 api.add_resource(AverageLanguageErrors, "/avg_lang_errors")
 api.add_resource(LoginNumber, "/login_num")
+api.add_resource(AvgTimeStatistics, "/time_stats")
+api.add_resource(AvgErrorsStatistics, "/errors_stats")
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8080, debug=True)
