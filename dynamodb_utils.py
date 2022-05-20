@@ -1,4 +1,4 @@
- boto3
+import boto3
 import pandas as pd
 import logger
 from botocore.exceptions import ClientError
@@ -268,11 +268,10 @@ class DbManager():
         # Adding the average error number to the statistics array:
         stats_array = json.loads(user['avg_time_stat'])
         
-        if len(stats_array) < MAX_STATISTICS_SPAN:
-            stats_array.append(avg_time_spent)
-        else:
+        if len(stats_array) >= MAX_STATISTICS_SPAN:
             del stats_array[0]    
-            stats_array.append(avg_time_spent)
+            
+        stats_array.append(float("{2:.f}".format(avg_time_spent)))
         
         user['avg_time_stat'] = json.dumps(stats_array)
         
@@ -323,12 +322,10 @@ class DbManager():
         # Adding the average error number to the statistics array:
         
         stats_array = json.loads(user['avg_error_stat'])
-        
-        if len(stats_array) < MAX_STATISTICS_SPAN:
-            stats_array.append(avg_lng_error_num)
-        else:
-            del stats_array[0]    
-            stats_array.append(avg_lng_error_num)
+        if len(stats_array) >= MAX_STATISTICS_SPAN:
+            del stats_array[0]
+            
+        stats_array.append(float("{2:.f}".format(avg_lng_error_num)))
         
         user['avg_error_stat'] = json.dumps(stats_array)
         
