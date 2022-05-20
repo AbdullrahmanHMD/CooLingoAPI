@@ -229,7 +229,15 @@ class Authentication(Resource):
         password = args['password']
         response, status = db_mgr.authenticate(email=email, password=password)
         
-        return response, status
+        json_response = {"response":{db_mgr.COLUMNS[0]: response[db_mgr.COLUMNS[0]],
+                db_mgr.COLUMNS[1]: str(response[db_mgr.COLUMNS[1]]),
+                db_mgr.COLUMNS[2]: response[db_mgr.COLUMNS[2]],
+                db_mgr.COLUMNS[3]: response[db_mgr.COLUMNS[3]],
+                db_mgr.COLUMNS[4]: response[db_mgr.COLUMNS[4]],
+                db_mgr.COLUMNS[5]: response[db_mgr.COLUMNS[5]]
+                    }, "status": status}
+        
+        return json_response
 
 class Questions(Resource):
     def get(self):
