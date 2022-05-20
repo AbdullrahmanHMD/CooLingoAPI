@@ -412,4 +412,3 @@ class DbManager():
         key = {self.COLUMNS[0] : user_id}
         
         return key
-    f
