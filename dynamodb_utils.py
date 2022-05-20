@@ -271,7 +271,7 @@ class DbManager():
         if len(stats_array) >= MAX_STATISTICS_SPAN:
             del stats_array[0]    
             
-        stats_array.append(float("{2:.f}".format(avg_time_spent)))
+        stats_array.append(float("{:.2f}".format(avg_time_spent)))
         
         user['avg_time_stat'] = json.dumps(stats_array)
         
@@ -325,7 +325,7 @@ class DbManager():
         if len(stats_array) >= MAX_STATISTICS_SPAN:
             del stats_array[0]
             
-        stats_array.append(float("{2:.f}".format(avg_lng_error_num)))
+        stats_array.append(float("{:.2f}".format(avg_lng_error_num)))
         
         user['avg_error_stat'] = json.dumps(stats_array)
         
