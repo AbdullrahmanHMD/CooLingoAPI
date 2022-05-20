@@ -259,7 +259,7 @@ class DbManager():
         login_num = user['num_of_logins']
         total_time_spent = user['total_time_spent']
         
-        avg_time_spent = (total_time_spent + session_time) // login_num
+        avg_time_spent = float("{:.2f}".format((total_time_spent + session_time) // login_num))
         
         user['avg_time_spent'] = avg_time_spent
         
@@ -293,7 +293,7 @@ class DbManager():
 
         total_time = user['total_time_spent']
         
-        user['total_time_spent'] = total_time + session_time
+        user['total_time_spent'] = float("{:.2f}".format(total_time + session_time))
         
         response = self.USERS_TABLE.put_item(Item=user)
         
@@ -315,7 +315,7 @@ class DbManager():
         login_num = user['num_of_logins']
         avg_lng_error_num = user['avg_lng_error_num']
         
-        avg_lng_error_num = (avg_lng_error_num + lang_errors) / login_num
+        avg_lng_error_num = float("{:.2f}".format((avg_lng_error_num + lang_errors) / login_num))
         user['avg_lng_error_num'] = avg_lng_error_num
         
         
@@ -347,7 +347,7 @@ class DbManager():
         user, status = self.get_user(email)
 
         total_lang_errors = user['lng_error_num']
-        user['lng_error_num'] = lang_errors + total_lang_errors
+        user['lng_error_num'] = float(lang_errors + total_lang_errors)
         
         response = self.USERS_TABLE.put_item(Item=user)
         
