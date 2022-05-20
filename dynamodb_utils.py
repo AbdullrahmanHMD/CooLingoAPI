@@ -65,7 +65,8 @@ class DbManager():
         DEFAULT_LANGUAGE_ERROR_NUM = DEFAULT_AVG_LNG_ERROR_NUM = '0'
         DEFUALT_NUM_OF_LOGINS = '1'
         DEFUALT_AVG_TIME_SPENT = DEFUALT_TOTAL_TIME_SPENT = '0'
-        DEFAULT_TIME_STATS, DEFAULT_ERROR_STATS = [], []
+        DEFAULT_TIME_STATS = []
+        DEFAULT_ERROR_STATS = []
         
         new_user = {
             self.COLUMNS[0] : user_id,
@@ -300,10 +301,11 @@ class DbManager():
         
         user['avg_time_stat'] = json.dumps(stats_array)
         
+        response = self.USERS_TABLE.put_item(Item=user)
         response = int(float(user['avg_time_spent']))
         return response, status
-    
-    
+
+
     def get_avg_time(self, email : str):
         user, status = self.get_user(email)
 
@@ -338,9 +340,9 @@ class DbManager():
         user, status = self.get_user(email)
 
         login_num = int(float(user['num_of_logins']))
-        avg_lng_error_num = float(user['avg_lng_error_num'])
+        total_error_number = float(user['lng_error_num'])
         
-        avg_lng_error_num = (avg_lng_error_num + lang_errors) / login_num
+        avg_lng_error_num = (total_error_number + lang_errors) / login_num
         user['avg_lng_error_num'] = str(avg_lng_error_num)
         
         
