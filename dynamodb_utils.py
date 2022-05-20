@@ -313,10 +313,10 @@ class DbManager():
         user, status = self.get_user(email)
 
         login_num = user['num_of_logins']
-        avg_lng_error_num = user['avg_lng_error_num']
+        avg_lng_error_num = float(user['avg_lng_error_num'])
         
-        avg_lng_error_num = float("{:.2f}".format((avg_lng_error_num + lang_errors) / login_num))
-        user['avg_lng_error_num'] = avg_lng_error_num
+        avg_lng_error_num = (avg_lng_error_num + lang_errors) / login_num
+        user['avg_lng_error_num'] = str(avg_lng_error_num)
         
         
         # Adding the average error number to the statistics array:
@@ -347,7 +347,7 @@ class DbManager():
         user, status = self.get_user(email)
 
         total_lang_errors = user['lng_error_num']
-        user['lng_error_num'] = float(lang_errors + total_lang_errors)
+        user['lng_error_num'] = lang_errors + total_lang_errors
         
         response = self.USERS_TABLE.put_item(Item=user)
         
