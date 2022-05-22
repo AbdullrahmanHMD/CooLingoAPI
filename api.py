@@ -149,7 +149,7 @@ class Word(Resource):
         word = args['word']
         update_type = args['update_type']
         
-        response, status = db_mgr.on_word_translate(email=email, word=word, update_type=update_type)
+        response, status = db_mgr.update_word(email=email, word=word, update_type=update_type)
         
         json_response = jsonify(response=response, status=status)
         
