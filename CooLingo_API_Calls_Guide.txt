@@ -796,28 +796,37 @@ Field name      | Type                  |
 
 ======================================================
 --- Call type -----------------------------
-POST: Adds the user's language
+POST: Adds a sentence to the sentence list with
+        its time stamp
 
 
 --- Fields -----------------------------\
 Field name      | Type                  |
 ----------------------------------------|
 "email"         | str                   |
-"language"      | str                   |
+"sentence"      | str                   |
 ----------------------------------------/
 
 -------------------------------------------
 --- Response ------------------------------
 
 {
-    "response": "user's language",
+    "response": [
+        [
+            "sentence 1",
+            "22-May-2022 18:06:02"
+        ],
+    ],
     "status": "success" or "fail"
 }
+
+NOTE:
+The time format is:
+    DAY-MONTH(string)-YEAR HOURS:MINUTES:SECONDS
 
 ======================================================
 --- Call type -----------------------------
-GET (Query): Gets a list of the last added 7 average
-            error values
+GET (Query): Gets the list of sentences
 
 
 --- Fields -----------------------------\
@@ -830,29 +839,23 @@ Field name      | Type                  |
 --- Response ------------------------------
 
 {
-    "response": "user's language",
-    "status": "success" or "fail"
+    "response": [
+        [
+            "sentence 1",
+            "22-May-2022 18:06:02"
+        ],
+        [
+            "sentence 2",
+            "its time stamp"
+        ],
+       
+    ],
+    "status": "success"
 }
 
-======================================================
---- Call type -----------------------------
-DELETE: Gets a list of the last added 7 average
-            error values
-
-
---- Fields -----------------------------\
-Field name      | Type                  |
-----------------------------------------|
-"email"         | str                   |
-----------------------------------------/
-
--------------------------------------------
---- Response ------------------------------
-
-{
-    "response": "user's language",
-    "status": "success" or "fail"
-}
+NOTE:
+The time format is:
+    DAY-MONTH(string)-YEAR HOURS:MINUTES:SECONDS
 
 
 
