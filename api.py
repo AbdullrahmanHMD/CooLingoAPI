@@ -447,7 +447,7 @@ class UserLanguage(Resource):
         email = args['email']
         sentence = args['language']
         
-        response, status = db_mgr.add_user_language(email=email, sentence=sentence)
+        response, status = db_mgr.add_user_language(email=email, language=language)
         
         json_response = jsonify(response=response, status=status)
         
