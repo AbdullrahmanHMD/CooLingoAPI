@@ -445,7 +445,7 @@ class UserLanguage(Resource):
     def post(self):
         args = user_language_args.parse_args()
         email = args['email']
-        sentence = args['language']
+        language = args['language']
         
         response, status = db_mgr.add_user_language(email=email, language=language)
         
