@@ -5,8 +5,12 @@ from botocore.exceptions import ClientError
 from hashlib import sha1
 import json
 from decimal import Decimal
+from datetime import datetime
 
-MAX_STATISTICS_SPAN = 10
+MAX_STATISTICS_SPAN = 7
+    
+WORD_CLICKED_KEY = 'clicked'
+WORD_SEEN_KEY = 'seen'
 
 class DbManager():
     
@@ -153,9 +157,7 @@ class DbManager():
             new_word_list = json.loads(user['words'])
 
             for word in words:
-                new_word_list[word] = 1  
-            
-            print(type(json.dumps(new_word_list)))
+                new_word_list[word] = {WORD_CLICKED_KEY : [], WORD_SEEN_KEY : []}
             
             user['words'] = json.dumps(new_word_list)
             response = self.USERS_TABLE.put_item(Item=user)
@@ -200,16 +202,42 @@ class DbManager():
         
         return words_list, status
         
-    def update_word(self, email, word):
+    def on_word_translate(self, email, word):
         user, status = self.get_user(email=email)
         
         try:
             word_dict = json.loads(user['words'])
             if word in word_dict.keys():
-                old_value = word_dict[word]
-                word_dict[word] = old_value + 1
+                word_dict[word][WORD_CLICKED_KEY].append(self.get_time_stamp())
                 user['words'] = json.dumps(word_dict)
                 response = self.USERS_TABLE.put_item(Item=user)
+            else:
+                status = 'fail'
+        except:
+            status = 'fail'
+            
+        return word_dict, status
+    
+    
+    def update_word(self, email, word, update_type):
+        user, status = self.get_user(email=email)
+        
+        try:
+            word_dict = json.loads(user['words'])
+            if word in word_dict.keys():
+                if update_type == WORD_CLICKED_KEY:
+                    word_dict[word][WORD_CLICKED_KEY].append(self.get_time_stamp())
+                    user['words'] = json.dumps(word_dict)
+                    response = self.USERS_TABLE.put_item(Item=user)
+                    
+                elif update_type == WORD_SEEN_KEY:
+                    word_dict[word][WORD_SEEN_KEY].append(self.get_time_stamp())
+                    user['words'] = json.dumps(word_dict)
+                    response = self.USERS_TABLE.put_item(Item=user)
+                
+                else:
+                    status = 'fail'
+                    break
             else:
                 status = 'fail'
         except:
@@ -414,3 +442,9 @@ class DbManager():
         key = {self.COLUMNS[0] : user_id}
         
         return key
+    
+    def get_time_stamp(self):
+        dateTimeObj = datetime.now()
+        time_stamp = dateTimeObj.strftime("%d-%b-%Y %H:%M:%S")
+        
+        return time_stamp

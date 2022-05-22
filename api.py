@@ -101,11 +101,12 @@ user_add_words_args = reqparse.RequestParser()
 user_add_words_args.add_argument("email", type=str, help="The email of the user", required=True)
 user_add_words_args.add_argument("words", type=str, help="The list of words the user want to learn", required=True, action='append')
 
-# --- Adding a word arguments ---------------------------------------------------------------------------------------
+# --- Updating a word arguments ---------------------------------------------------------------------------------------
 
 update_words_args = reqparse.RequestParser()
 update_words_args.add_argument("email", type=str, help="The email of the user", required=True)
 update_words_args.add_argument("word", type=str, help="The word whose value will be updated", required=True)
+update_words_args.add_argument("update_type", type=str, help="Specifies the type of update to the word", required=True)
 
 # --- Deleting a word arguments -------------------------------------------------------------------------------------
 
@@ -141,6 +142,18 @@ class Word(Resource):
         
         return json_response
         
+    
+    def patch(self):
+        args = update_words_args.parse_args()
+        email = args['email']
+        word = args['word']
+        update_type = args['update_type']
+        
+        response, status = db_mgr.on_word_translate(email=email, word=word, update_type=update_type)
+        
+        json_response = jsonify(response=response, status=status)
+        
+        return json_response
     
     def patch(self):
         args = update_words_args.parse_args()
