@@ -201,24 +201,7 @@ class DbManager():
         words_list = json.loads(user['words'])
         
         return words_list, status
-        
-    def on_word_translate(self, email, word):
-        user, status = self.get_user(email=email)
-        
-        try:
-            word_dict = json.loads(user['words'])
-            if word in word_dict.keys():
-                word_dict[word][WORD_CLICKED_KEY].append(self.get_time_stamp())
-                user['words'] = json.dumps(word_dict)
-                response = self.USERS_TABLE.put_item(Item=user)
-            else:
-                status = 'fail'
-        except:
-            status = 'fail'
             
-        return word_dict, status
-    
-    
     def update_word(self, email, word, update_type):
         user, status = self.get_user(email=email)
         
@@ -237,7 +220,6 @@ class DbManager():
                 
                 else:
                     status = 'fail'
-                    break
             else:
                 status = 'fail'
         except:
