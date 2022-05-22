@@ -55,8 +55,7 @@ class User(Resource):
                         db_mgr.COLUMNS[1]: str(response[db_mgr.COLUMNS[1]]),
                         db_mgr.COLUMNS[2]: response[db_mgr.COLUMNS[2]],
                         db_mgr.COLUMNS[3]: response[db_mgr.COLUMNS[3]],
-                        db_mgr.COLUMNS[4]: response[db_mgr.COLUMNS[4]],
-                        db_mgr.COLUMNS[5]: response[db_mgr.COLUMNS[5]]
+                        db_mgr.COLUMNS[4]: response[db_mgr.COLUMNS[4]]
                          }, "status": status}
         
         return json_response 
@@ -404,21 +403,82 @@ class AvgErrorsStatistics(Resource):
         json_response = jsonify(response=response, status=status)
         
         return json_response
+    
+# --- Add sentence with language errors arguments ---------------------------------------------------------------------------------------
 
+sentence_with_lang_error_args = reqparse.RequestParser()
+sentence_with_lang_error_args.add_argument("email", type=str, help="The email of the user.", required=True)
+sentence_with_lang_error_args.add_argument("sentence", type=str, help="The sentence in which the user has made a mistake.", required=True)
+
+# --- Senteces with language errors resource ---------------------------------------------------------------------------------------
+
+class SentenceWithLangError(Resource):
+    def post(self):
+        args = sentence_with_lang_error_args.parse_args()
+        email = args['email']
+        sentence = args['sentence']
+        
+        response, status = db_mgr.add_sentences_with_errors(email=email, sentence=sentence)
+        
+        json_response = jsonify(response=response, status=status)
+        
+        return json_response
+    
+    def get(self):
+        email = request.args.get('email')
+        
+        response, status = db_mgr.get_sentences_with_errors(email=email)
+        
+        json_response = jsonify(response=response, status=status)
+        
+        return json_response
+
+# --- User's language arguments ---------------------------------------------------------------------------------------
+
+user_language_args = reqparse.RequestParser()
+user_language_args.add_argument("email", type=str, help="The email of the user.", required=True)
+user_language_args.add_argument("language", type=str, help="The language of the user", required=True)
+    
+# --- User's language resource ---------------------------------------------------------------------------------------
+
+class UserLanguage(Resource):
+    def post(self):
+        args = user_language_args.parse_args()
+        email = args['email']
+        sentence = args['language']
+        
+        response, status = db_mgr.add_user_language(email=email, sentence=sentence)
+        
+        json_response = jsonify(response=response, status=status)
+        
+        return json_response
+    
+    def get(self):
+        email = request.args.get('email')
+        
+        response, status = db_mgr.get_user_language(email=email)
+        
+        json_response = jsonify(response=response, status=status)
+        
+        return json_response
 
 api.add_resource(Authentication, "/auth")    
 api.add_resource(User, "/users")
 api.add_resource(Word, "/words")
 api.add_resource(LanguageLevel, "/lang_lvl")
-api.add_resource(Questions, "/questions")
 
+api.add_resource(Questions, "/questions")
 api.add_resource(TotalTimeSpent, "/total_time")
 api.add_resource(AverageTimeSpent, "/avg_time")
 api.add_resource(LanguageErrors, "/lang_errors")
+
 api.add_resource(AverageLanguageErrors, "/avg_lang_errors")
 api.add_resource(LoginNumber, "/login_num")
 api.add_resource(AvgTimeStatistics, "/time_stats")
 api.add_resource(AvgErrorsStatistics, "/errors_stats")
+
+api.add_resource(SentenceWithLangError, "/sentences_with_errors")
+api.add_resource(UserLanguage, "/user_lang")
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8080, debug=True)

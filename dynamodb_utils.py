@@ -35,7 +35,8 @@ class DbManager():
                 'first_name', 'last_name', 'password', 'words',
                 'language_level', 'lng_error_num', 'avg_lng_error_num',
                 'total_time_spent', 'avg_time_spent', 'num_of_logins',
-                'avg_time_stat', 'avg_error_stat']
+                'avg_time_stat', 'avg_error_stat', 'sentences_with_lang_errors',
+                'language']
 
 
     def add_user_dict(self, new_user):
@@ -71,6 +72,8 @@ class DbManager():
         DEFUALT_AVG_TIME_SPENT = DEFUALT_TOTAL_TIME_SPENT = '0'
         DEFAULT_TIME_STATS = []
         DEFAULT_ERROR_STATS = []
+        DEFAULT_SENTENCES_WITH_LANG_ERRORS = []
+        DEFAULT_LANGUAGE = 'N/A'
         
         new_user = {
             self.COLUMNS[0] : user_id,
@@ -87,7 +90,9 @@ class DbManager():
             self.COLUMNS[11] : DEFUALT_AVG_TIME_SPENT,
             self.COLUMNS[12] : DEFUALT_NUM_OF_LOGINS,
             self.COLUMNS[13] : json.dumps(DEFAULT_TIME_STATS),
-            self.COLUMNS[14] : json.dumps(DEFAULT_ERROR_STATS)
+            self.COLUMNS[14] : json.dumps(DEFAULT_ERROR_STATS),
+            self.COLUMNS[15] : json.dumps(DEFAULT_SENTENCES_WITH_LANG_ERRORS),
+            self.COLUMNS[16] : DEFAULT_LANGUAGE
             }
         
         try:
@@ -398,6 +403,40 @@ class DbManager():
         response = int(float(user['num_of_logins']))
         
         return response, status
+    
+    # --- Sentences with mistakes ------------------------------------------------------
+    
+    def add_sentences_with_errors(self, email : str, sentence : str):
+        user, status = self.get_user(email)
+        
+        sentences_list = json.loads(user['sentences_with_lang_errors'])
+        sentences_list.append([sentence, self.get_time_stamp()])
+        
+        response = self.USERS_TABLE.put_item(Item=user)
+        
+        return sentences_list, status
+        
+    
+    def get_sentences_with_errors(self, email : str):
+        user, status = self.get_user(email)
+        
+        sentences_list = json.loads(user['sentences_with_lang_errors'])
+        
+        return sentences_list, status
+    
+    # --- User's language ------------------------------------------------------------------
+    
+    def add_user_language(self, email : str, language : str):
+        user, status = self.get_user(email)
+        user['language'] = language
+
+        response = self.USERS_TABLE.put_item(Item=user)
+        
+        return user['language'], status
+        
+    def get_user_language(self, email : str):
+        user, status = self.get_user(email)
+        return user['language'], status
     
     # --- Statistics ------------------------------------------------------------------------
     
