@@ -412,6 +412,7 @@ class DbManager():
         sentences_list = json.loads(user['sentences_with_lang_errors'])
         sentences_list.append([sentence, self.get_time_stamp()])
         
+        user['sentences_with_lang_errors'] = json.dumps(sentences_list)
         response = self.USERS_TABLE.put_item(Item=user)
         
         return sentences_list, status
