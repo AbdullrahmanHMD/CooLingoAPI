@@ -246,9 +246,8 @@ class Authentication(Resource):
                 db_mgr.COLUMNS[1]: str(response[db_mgr.COLUMNS[1]]),
                 db_mgr.COLUMNS[2]: response[db_mgr.COLUMNS[2]],
                 db_mgr.COLUMNS[3]: response[db_mgr.COLUMNS[3]],
-                db_mgr.COLUMNS[4]: response[db_mgr.COLUMNS[4]],
-                db_mgr.COLUMNS[5]: response[db_mgr.COLUMNS[5]]
-                    }, "status": status}
+                db_mgr.COLUMNS[4]: response[db_mgr.COLUMNS[4]]
+                }, "status": status}
         
         return json_response
 
