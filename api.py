@@ -155,17 +155,6 @@ class Word(Resource):
         
         return json_response
     
-    def patch(self):
-        args = update_words_args.parse_args()
-        email = args['email']
-        word = args['word']
-        
-        response, status = db_mgr.update_word(email=email, word=word)
-        
-        json_response = jsonify(response=response, status=status)
-        
-        return json_response
-    
     def get(self):
         email = request.args.get('email')
         response, status = db_mgr.get_words(email) 
