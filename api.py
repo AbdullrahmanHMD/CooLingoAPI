@@ -494,7 +494,7 @@ api.add_resource(SentenceWithLangError, "/sentences_with_errors")
 api.add_resource(UserLanguage, "/user_lang")
 
 api.add_resource(Questions, "/questions")
-api.add_resource(UserLanguage, "/languages")
+api.add_resource(Languages, "/languages")
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8080, debug=True)
