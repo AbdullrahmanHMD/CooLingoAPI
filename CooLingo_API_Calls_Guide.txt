@@ -17,6 +17,7 @@ Field name      | Type                  |
 "last_name"     | str                   |
 "email"         | str                   |
 "password"      | str                   |
+"language"      | str                   |
 ----------------------------------------/
 
 -----------------------------------------
@@ -26,8 +27,9 @@ Field name      | Type                  |
     "age": "the age of the user", 
     "first_name": "The first name",
     "last_name": "The last name",
-    "email": "The email " 
-    "password":"The password"
+    "email": "The email ",
+    "password": "The password",
+    "language": "The language"
 }
 
 -------------------------------------------
@@ -39,7 +41,8 @@ Field name      | Type                  |
     "age": "the age of the user", 
     "first_name": "The first name",
     "last_name": "The last name",
-    "email": "The email " 
+    "email": "The email",
+    "language": "The language" 
     }
             
 "status": "success" or "fail"
@@ -54,6 +57,7 @@ GET (Query): Gets the following user's
 "first_name"    | str                   
 "last_name"     | str                   
 "email"         | str                                     
+"language"      | str                                     
 
 
 --- Fields -----------------------------\
@@ -65,14 +69,13 @@ Field name      | Type                  |
 -------------------------------------------
 --- Response ------------------------------
 
-
-
 {
 "response": 
     {"age": "the age of the user", 
     "first_name": "The first name",
     "last_name": "The last name",
-    "email": "The email " 
+    "email": "The email",
+    "language": "The language"  
     }
             
 "status": "success" or "fail"
@@ -857,10 +860,44 @@ NOTE:
 The time format is:
     DAY-MONTH(string)-YEAR HOURS:MINUTES:SECONDS
 
+======================================================
+=== Languages: ==================
+======================================================
+
+-------------------------------------------
+--- End point -----------------------------
+
+/languages
+
+======================================================
+--- Call type -----------------------------
+GET: Returns a json object with language names
+    as keys and their codes as values
 
 
+--- Fields -----------------------------\
+Field name      | Type                  |
+----------------------------------------|
+"email"         | str                   |
+----------------------------------------/
 
+-------------------------------------------
+--- Response ------------------------------
 
+{
+    "languages": {
+        "Arabic": "ar",
+        "Italian": "it",
+        "Japanese": "ja",
+        "Korean": "ko",
+        "Russian": "ru",
+        "French": "fr",
+        "Spanish": "es",
+        "Swedish": "sv",
+        "German": "de",
+        "Turkish": "tr"
+    }
+}
 
 
 
