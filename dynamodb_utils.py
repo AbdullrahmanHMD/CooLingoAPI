@@ -46,7 +46,8 @@ class DbManager():
 
     def add_user(self, age : int,
                 email : str, first_name : str,
-                last_name : str, password : str):
+                last_name : str, password : str,
+                language : str):
         """_summary_
             Given a user's information, adds a user to the Users database.
         Args:
@@ -73,7 +74,6 @@ class DbManager():
         DEFAULT_TIME_STATS = []
         DEFAULT_ERROR_STATS = []
         DEFAULT_SENTENCES_WITH_LANG_ERRORS = []
-        DEFAULT_LANGUAGE = 'N/A'
         
         new_user = {
             self.COLUMNS[0] : user_id,
@@ -92,7 +92,7 @@ class DbManager():
             self.COLUMNS[13] : json.dumps(DEFAULT_TIME_STATS),
             self.COLUMNS[14] : json.dumps(DEFAULT_ERROR_STATS),
             self.COLUMNS[15] : json.dumps(DEFAULT_SENTENCES_WITH_LANG_ERRORS),
-            self.COLUMNS[16] : DEFAULT_LANGUAGE
+            self.COLUMNS[16] : language
             }
         
         try:
@@ -102,7 +102,8 @@ class DbManager():
                 self.COLUMNS[2] : email,
                 self.COLUMNS[3] : first_name,
                 self.COLUMNS[4] : last_name,
-                self.COLUMNS[5] : password}
+                self.COLUMNS[5] : password,
+                self.COLUMNS[16] : language}
             status = 'success'
         except ClientError as err:
             error_msg = err.response['Error']['Message']

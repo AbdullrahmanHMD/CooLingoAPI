@@ -1,0 +1,15 @@
+{
+    "languages":
+    {
+        "Arabic" : "ar",
+        "Italian" : "it",
+        "Japanese" : "ja",
+        "Korean" : "ko",
+        "Russian" : "ru",
+        "French" : "fr",
+        "Spanish" : "es",
+        "Swedish" : "sv",
+        "German" : "de",
+        "Turkish" : "tr"
+    }
+}

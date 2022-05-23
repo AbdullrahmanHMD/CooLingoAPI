@@ -1,4 +1,5 @@
 from urllib import response
+from data_extractor import get_languages
 from flask import Flask, request
 from flask_restful import Api, Resource, reqparse, abort
 from dynamodb_utils import *
@@ -10,7 +11,7 @@ api = Api(app)
 
 
 COLUMNS = ['user_id', 'age', 'email',
-            'first_name', 'last_name', 'password']
+            'first_name', 'last_name', 'password', 'language']
 
 # --- Adding a new user arguments -----------------------------------------------------------------------------------
 
@@ -20,6 +21,7 @@ user_add_args.add_argument("first_name", type=str, help="The first name of the u
 user_add_args.add_argument("last_name", type=str, help="The last name of the user", required=True)
 user_add_args.add_argument("email", type=str, help="The email of the user", required=True)
 user_add_args.add_argument("password", type=str, help="The password of the user", required=True)
+user_add_args.add_argument("language", type=str, help="The language of the user", required=True)
 
 # --- Deleting a  user arguments ------------------------------------------------------------------------------------
 
@@ -55,7 +57,8 @@ class User(Resource):
                         db_mgr.COLUMNS[1]: str(response[db_mgr.COLUMNS[1]]),
                         db_mgr.COLUMNS[2]: response[db_mgr.COLUMNS[2]],
                         db_mgr.COLUMNS[3]: response[db_mgr.COLUMNS[3]],
-                        db_mgr.COLUMNS[4]: response[db_mgr.COLUMNS[4]]
+                        db_mgr.COLUMNS[4]: response[db_mgr.COLUMNS[4]],
+                        db_mgr.COLUMNS[16]: response[db_mgr.COLUMNS[16]]
                          }, "status": status}
         
         return json_response 
@@ -70,13 +73,14 @@ class User(Resource):
         
         response, status = db_mgr.add_user(age=args['age'], first_name=args['first_name'],
                                    last_name=args['last_name'], email=args['email'],
-                                   password=args['password'])
+                                   password=args['password'], language=args['language'])
 
         json_response = {"response": {
                 db_mgr.COLUMNS[1]: str(response[db_mgr.COLUMNS[1]]),
                 db_mgr.COLUMNS[2]: response[db_mgr.COLUMNS[2]],
                 db_mgr.COLUMNS[3]: response[db_mgr.COLUMNS[3]],
                 db_mgr.COLUMNS[4]: response[db_mgr.COLUMNS[4]],
+                db_mgr.COLUMNS[16]: response[db_mgr.COLUMNS[16]]
                     },
                          "status": status}
         
@@ -239,11 +243,22 @@ class Authentication(Resource):
         
         return json_response
 
+# --- Questions resource ----------------------------------------------------------------------------------------------------
+
 class Questions(Resource):
     def get(self):
-        from question_extractor import QUESTIONS_JSON_ARRAY
-        return QUESTIONS_JSON_ARRAY
+        from data_extractor import get_questions
+        QUESTION_NUM = 8 
+        questions_json_array = get_questions(QUESTION_NUM)
+        return questions_json_array
 
+# --- Languages resource ---------------------------------------------------------------------------------------------------
+
+class Languages(Resource):
+    def get(self):
+        from data_extractor import get_languages
+        questions_json_array = get_languages()
+        return questions_json_array
 
 
 # --- User total time spent arguments ---------------------------------------------------------------------------------------
@@ -459,7 +474,7 @@ class UserLanguage(Resource):
         response, status = db_mgr.get_user_language(email=email)
         
         json_response = jsonify(response=response, status=status)
-        
+         
         return json_response
 
 api.add_resource(Authentication, "/auth")    
@@ -467,18 +482,19 @@ api.add_resource(User, "/users")
 api.add_resource(Word, "/words")
 api.add_resource(LanguageLevel, "/lang_lvl")
 
-api.add_resource(Questions, "/questions")
 api.add_resource(TotalTimeSpent, "/total_time")
 api.add_resource(AverageTimeSpent, "/avg_time")
 api.add_resource(LanguageErrors, "/lang_errors")
-
 api.add_resource(AverageLanguageErrors, "/avg_lang_errors")
+
 api.add_resource(LoginNumber, "/login_num")
 api.add_resource(AvgTimeStatistics, "/time_stats")
 api.add_resource(AvgErrorsStatistics, "/errors_stats")
-
 api.add_resource(SentenceWithLangError, "/sentences_with_errors")
 api.add_resource(UserLanguage, "/user_lang")
+
+api.add_resource(Questions, "/questions")
+api.add_resource(UserLanguage, "/languages")
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8080, debug=True)
