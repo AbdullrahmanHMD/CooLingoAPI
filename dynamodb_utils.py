@@ -358,7 +358,7 @@ class DbManager():
         login_num = int(float(user['num_of_logins']))
         total_error_number = float(user['lng_error_num'])
         
-        avg_lng_error_num = (total_error_number + lang_errors) / login_num
+        avg_lng_error_num = float("{:.2f}".format((total_error_number + lang_errors) / login_num))
         user['avg_lng_error_num'] = str(avg_lng_error_num)
         
         
