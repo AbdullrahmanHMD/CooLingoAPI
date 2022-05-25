@@ -301,7 +301,7 @@ class DbManager():
         login_num = float(user['num_of_logins'])
         total_time_spent = float(user['total_time_spent'])
         
-        avg_time_spent = float("f{:.2f}".format((total_time_spent + session_time) / login_num))
+        avg_time_spent = float("{:.2f}".format((total_time_spent + session_time) / login_num))
         
         user['avg_time_spent'] = str(avg_time_spent)
         
