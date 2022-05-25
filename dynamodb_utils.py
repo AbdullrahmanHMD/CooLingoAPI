@@ -281,7 +281,7 @@ class DbManager():
         
         response = user['total_time_spent']
         
-        response = int(float(user['total_time_spent']))
+        response = float(user['total_time_spent'])
         
         return response, status
     
@@ -289,7 +289,7 @@ class DbManager():
     def get_total_time(self, email : str):
         user, status = self.get_user(email)
 
-        response = int(float(user['total_time_spent']))
+        response = float(user['total_time_spent'])
         
         return response, status
     
@@ -298,10 +298,10 @@ class DbManager():
     def add_avg_time(self, email : str, session_time : int):
         user, status = self.get_user(email)
 
-        login_num = int(float(user['num_of_logins']))
+        login_num = float(user['num_of_logins'])
         total_time_spent = float(user['total_time_spent'])
         
-        avg_time_spent = float("{:.2f}".format((total_time_spent + session_time) // login_num))
+        avg_time_spent = float("f{:.2f}".format((total_time_spent + session_time) / login_num))
         
         user['avg_time_spent'] = str(avg_time_spent)
         
@@ -318,14 +318,14 @@ class DbManager():
         user['avg_time_stat'] = json.dumps(stats_array)
         
         response = self.USERS_TABLE.put_item(Item=user)
-        response = int(float(user['avg_time_spent']))
+        response = float(user['avg_time_spent'])
         return response, status
 
 
     def get_avg_time(self, email : str):
         user, status = self.get_user(email)
 
-        response = int(float(user['avg_time_spent']))
+        response = float(user['avg_time_spent'])
         return response, status
     
     # --- Total Language Errors ----------------------------------------------------
@@ -374,14 +374,14 @@ class DbManager():
         
         response = self.USERS_TABLE.put_item(Item=user)
         
-        response = int(float(user['avg_lng_error_num']))
+        response = float(user['avg_lng_error_num'])
         return response, status
     
     
     def get_avg_lang_error(self, email : str):
         user, status = self.get_user(email)
 
-        response = int(float(user['avg_lng_error_num']))
+        response = float(user['avg_lng_error_num'])
         
         return response, status
     
