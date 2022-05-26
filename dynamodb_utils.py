@@ -262,7 +262,7 @@ class DbManager():
         
         return response, status
     
-    def get_word_status(self, email, word):
+    def get_words_status(self, email, word):
         
         user, status = self.get_user(email=email)
         
