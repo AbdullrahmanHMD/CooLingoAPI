@@ -1,3 +1,4 @@
+from filecmp import DEFAULT_IGNORES
 import boto3
 import pandas as pd
 import logger
@@ -36,7 +37,7 @@ class DbManager():
                 'language_level', 'lng_error_num', 'avg_lng_error_num',
                 'total_time_spent', 'avg_time_spent', 'num_of_logins',
                 'avg_time_stat', 'avg_error_stat', 'sentences_with_lang_errors',
-                'language']
+                'language', 'mastered_words']
 
 
     def add_user_dict(self, new_user):
@@ -74,6 +75,7 @@ class DbManager():
         DEFAULT_TIME_STATS = []
         DEFAULT_ERROR_STATS = []
         DEFAULT_SENTENCES_WITH_LANG_ERRORS = []
+        DEFAULT_MASTERED_WORDS = {}
         
         new_user = {
             self.COLUMNS[0] : user_id,
@@ -92,7 +94,8 @@ class DbManager():
             self.COLUMNS[13] : json.dumps(DEFAULT_TIME_STATS),
             self.COLUMNS[14] : json.dumps(DEFAULT_ERROR_STATS),
             self.COLUMNS[15] : json.dumps(DEFAULT_SENTENCES_WITH_LANG_ERRORS),
-            self.COLUMNS[16] : language
+            self.COLUMNS[16] : language,
+            self.COLUMNS[17] : json.dumps(DEFAULT_MASTERED_WORDS)
             }
         
         try:
@@ -230,9 +233,35 @@ class DbManager():
                 status = 'fail'
         except:
             status = 'fail'
-            
+        
+        _, status = self.update_word_status(email=email, word=word)
+        
         return word_dict, status
     
+    # --- Word Status -------------------------------------------------------------
+    
+    def update_word_status(self, email, word):
+        
+        user, status = self.get_user(email=email)
+        
+        added_word = json.loads(user['words'])
+        added_word = added_word[word]
+        
+        words_status_dict = json.loads(user['mastered_words'])
+        
+        clicked = added_word[WORD_CLICKED_KEY]
+        seen = added_word[WORD_SEEN_KEY]
+        
+        word_status = self.get_word_status(clicked=clicked, seen=seen)
+        
+        words_status_dict[word] = word_status
+        
+        user['mastered_words'] = json.dumps(words_status_dict)
+        
+        response = self.USERS_TABLE.put_item(Item=user)
+        
+        return response, status
+        
     # --- Login Authentication ----------------------------------------------------
     
     def authenticate(self, email : str, password : str):
@@ -457,7 +486,16 @@ class DbManager():
         
         return avg_error_stats, status
     
+    # --- Mastered Words ------------------------------------------------------------------------
     
+    def get_mastered_words(self, email: str):
+        
+        user, status = self.get_user(email)
+        
+        mastered_words = json.loads(user['mastered_words'])
+        
+        return mastered_words, status
+        
     # --- Helper functions ------------------------------------------------------------------------
     
     def get_key(self, email : str):
@@ -471,3 +509,50 @@ class DbManager():
         time_stamp = dateTimeObj.strftime("%d-%b-%Y %H:%M:%S")
         
         return time_stamp
+    
+def is_word_mastered(self, clicked, seen):
+    
+    if len(clicked) != 0:
+        last_clicked = clicked[-1]
+        
+    else:
+        if len(seen) < 10:
+            return False
+        else:
+            return True
+        
+    seen_word = seen[-10]    
+        
+    time_format = "%d-%b-%Y %H:%M:%S"
+    last_clicked = datetime.strptime(last_clicked, time_format)
+    seen_word = datetime.strptime(seen_word, time_format)
+
+    return max(last_clicked, seen_word) == seen_word
+
+def is_word_reviwing(self, clicked, seen):
+    
+    if len(clicked) != 0:
+        last_clicked = clicked[-1]
+        
+    else:
+        if len(seen) < 5:
+            return False
+        else:
+            return True
+        
+    seen_word = seen[-5]    
+        
+    time_format = "%d-%b-%Y %H:%M:%S"
+    last_clicked = datetime.strptime(last_clicked, time_format)
+    seen_word = datetime.strptime(seen_word, time_format)
+
+    return max(last_clicked, seen_word) == seen_word
+
+def get_word_status(self, clicked, seen):
+    status = 'learning'
+    if self.is_word_mastered(clicked, seen):
+        status = 'mastered'
+    elif self.is_word_reviwing(clicked, seen):
+        status = 'in review'
+
+    return status
