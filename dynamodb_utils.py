@@ -265,7 +265,7 @@ class DbManager():
         
         return response, status, word_status
     
-    def get_words_status(self, email, word):
+    def get_words_status(self, email):
         
         user, status = self.get_user(email=email)
         
