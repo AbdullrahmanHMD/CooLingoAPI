@@ -518,7 +518,7 @@ class DbManager():
         
         return time_stamp
     
-def is_word_mastered(self, clicked, seen):
+def is_word_mastered(clicked, seen):
     
     if len(clicked) != 0:
         last_clicked = clicked[-1]
@@ -537,7 +537,7 @@ def is_word_mastered(self, clicked, seen):
 
     return max(last_clicked, seen_word) == seen_word
 
-def is_word_reviwing(self, clicked, seen):
+def is_word_reviwing(clicked, seen):
     
     if len(clicked) != 0:
         last_clicked = clicked[-1]
@@ -556,11 +556,11 @@ def is_word_reviwing(self, clicked, seen):
 
     return max(last_clicked, seen_word) == seen_word
 
-def get_word_status(self, clicked, seen):
+def get_word_status(clicked, seen):
     status = 'learning'
-    if self.is_word_mastered(clicked, seen):
+    if is_word_mastered(clicked, seen):
         status = 'mastered'
-    elif self.is_word_reviwing(clicked, seen):
+    elif is_word_reviwing(clicked, seen):
         status = 'in review'
 
     return status
