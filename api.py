@@ -483,7 +483,7 @@ class WordsStatus(Resource):
     def get(self):
         email = request.args.get('email')
         
-        response, status = db_mgr.get_word_status(email=email)
+        response, status = db_mgr.get_words_status(email=email)
         
         json_response = jsonify(response=response, status=status)
          
