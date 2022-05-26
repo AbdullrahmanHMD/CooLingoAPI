@@ -234,7 +234,10 @@ class DbManager():
         except:
             status = 'fail'
         
-        _, status = self.update_word_status(email=email, word=word)
+        _, status, word_status = self.update_word_status(email=email, word=word)
+        
+        if word_status == "mastered":
+            response, status = self.delete_words(email=email, words=[word])
         
         return word_dict, status
     
@@ -260,7 +263,7 @@ class DbManager():
         
         response = self.USERS_TABLE.put_item(Item=user)
         
-        return response, status
+        return response, status, word_status
     
     def get_words_status(self, email, word):
         
