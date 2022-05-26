@@ -478,12 +478,12 @@ class UserLanguage(Resource):
         return json_response
     
 
-class MasteredWords(Resource):
+class WordsStatus(Resource):
     
     def get(self):
         email = request.args.get('email')
         
-        response, status = db_mgr.get_mastered_words(email=email)
+        response, status = db_mgr.get_word_status(email=email)
         
         json_response = jsonify(response=response, status=status)
          
@@ -505,7 +505,7 @@ api.add_resource(AvgTimeStatistics, "/time_stats")
 api.add_resource(AvgErrorsStatistics, "/errors_stats")
 api.add_resource(SentenceWithLangError, "/sentences_with_errors")
 api.add_resource(UserLanguage, "/user_lang")
-api.add_resource(MasteredWords, "/mastered_words")
+api.add_resource(WordsStatus, "/words_status")
 
 api.add_resource(Questions, "/questions")
 api.add_resource(Languages, "/languages")

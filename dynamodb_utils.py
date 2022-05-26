@@ -37,7 +37,7 @@ class DbManager():
                 'language_level', 'lng_error_num', 'avg_lng_error_num',
                 'total_time_spent', 'avg_time_spent', 'num_of_logins',
                 'avg_time_stat', 'avg_error_stat', 'sentences_with_lang_errors',
-                'language', 'mastered_words']
+                'language', 'words_status']
 
 
     def add_user_dict(self, new_user):
@@ -247,7 +247,7 @@ class DbManager():
         added_word = json.loads(user['words'])
         added_word = added_word[word]
         
-        words_status_dict = json.loads(user['mastered_words'])
+        words_status_dict = json.loads(user['words_status'])
         
         clicked = added_word[WORD_CLICKED_KEY]
         seen = added_word[WORD_SEEN_KEY]
@@ -256,11 +256,19 @@ class DbManager():
         
         words_status_dict[word] = word_status
         
-        user['mastered_words'] = json.dumps(words_status_dict)
+        user['words_status'] = json.dumps(words_status_dict)
         
         response = self.USERS_TABLE.put_item(Item=user)
         
         return response, status
+    
+    def get_word_status(self, email, word):
+        
+        user, status = self.get_user(email=email)
+        
+        words_status_dict = json.loads(user['words_status'])
+
+        return words_status_dict, status
         
     # --- Login Authentication ----------------------------------------------------
     
@@ -492,7 +500,7 @@ class DbManager():
         
         user, status = self.get_user(email)
         
-        mastered_words = json.loads(user['mastered_words'])
+        mastered_words = json.loads(user['words_status'])
         
         return mastered_words, status
         
