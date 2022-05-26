@@ -252,7 +252,7 @@ class DbManager():
         clicked = added_word[WORD_CLICKED_KEY]
         seen = added_word[WORD_SEEN_KEY]
         
-        word_status = self.get_word_status(clicked=clicked, seen=seen)
+        word_status = get_word_status(clicked=clicked, seen=seen)
         
         words_status_dict[word] = word_status
         
