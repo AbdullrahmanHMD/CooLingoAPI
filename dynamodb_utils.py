@@ -231,6 +231,7 @@ class DbManager():
                     status = 'fail'
             else:
                 status = 'fail'
+                return response, status
         except:
             status = 'fail'
         
@@ -532,6 +533,9 @@ def is_word_mastered(clicked, seen):
         else:
             return True
         
+    if len(seen) < 10:
+        return False
+    
     seen_word = seen[-10]    
         
     time_format = "%d-%b-%Y %H:%M:%S"
@@ -550,7 +554,10 @@ def is_word_reviwing(clicked, seen):
             return False
         else:
             return True
-        
+    
+    if len(seen) < 5:
+        return False
+    
     seen_word = seen[-5]    
         
     time_format = "%d-%b-%Y %H:%M:%S"
