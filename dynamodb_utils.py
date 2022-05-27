@@ -229,11 +229,13 @@ class DbManager():
                 
                 else:
                     status = 'fail'
+                    return response, status
             else:
                 status = 'fail'
                 return response, status
         except:
             status = 'fail'
+            return response, status
         
         _, status, word_status = self.update_word_status(email=email, word=word)
         
