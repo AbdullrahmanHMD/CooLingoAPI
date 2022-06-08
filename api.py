@@ -58,6 +58,7 @@ class User(Resource):
                         db_mgr.COLUMNS[2]: response[db_mgr.COLUMNS[2]],
                         db_mgr.COLUMNS[3]: response[db_mgr.COLUMNS[3]],
                         db_mgr.COLUMNS[4]: response[db_mgr.COLUMNS[4]],
+                        db_mgr.COLUMNS[7]: response[db_mgr.COLUMNS[7]],
                         db_mgr.COLUMNS[16]: response[db_mgr.COLUMNS[16]]
                          }, "status": status}
         
