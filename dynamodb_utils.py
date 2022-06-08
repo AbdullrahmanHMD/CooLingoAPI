@@ -273,8 +273,9 @@ class DbManager():
         user, status = self.get_user(email=email)
         
         words_status_dict = json.loads(user['words_status'])
+        words = json.loads(user['words'])
 
-        return words_status_dict, status
+        return words, words_status_dict, status
         
     # --- Login Authentication ----------------------------------------------------
     
